@@ -6,8 +6,6 @@ const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
 
 const HERO_IMG = '/images/hero.png'
-const ABOUT_IMG =
-  'https://images.unsplash.com/photo-1484863137850-59afcfe05386?w=600&h=700&fit=crop&auto=format'
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -542,22 +540,9 @@ function AboutSection() {
 
   return (
     <section id="sobre-mi" className="py-20 bg-white">
-      <div className="max-w-6xl mx-auto px-5 grid md:grid-cols-2 gap-14 items-center">
-        {/* Image */}
-        <div className="relative order-2 md:order-1">
-          <div className="absolute -top-4 -left-4 w-full h-full rounded-3xl -z-10"
-            style={{ background: '#d6f2ed' }} />
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ background: '#aee4da' }}>
-            <img
-              src={ABOUT_IMG}
-              alt="Enfermera a domicilio en Santiago"
-              className="w-full h-[480px] object-cover"
-            />
-          </div>
-        </div>
-
+      <div className="max-w-3xl mx-auto px-5">
         {/* Text */}
-        <div className="order-1 md:order-2">
+        <div>
           <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6"
             style={{ background: '#EBF3FB', color: '#5B9BD5', fontFamily: 'Outfit, sans-serif' }}>
             Sobre mí

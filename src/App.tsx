@@ -215,7 +215,11 @@ function Header() {
 
         {/* Mobile hamburger */}
         <button
+          type="button"
           onClick={() => setOpen(!open)}
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={open}
+          aria-controls="menu-movil"
           className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-teal-50 transition-colors"
         >
           {open ? <IconClose /> : <IconMenu />}
@@ -224,7 +228,7 @@ function Header() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-5 py-4 flex flex-col gap-4">
+        <div id="menu-movil" className="md:hidden bg-white border-t border-gray-100 px-5 py-4 flex flex-col gap-4">
           {navLinks.map(({ label, href }) => (
             <a
               key={href}
@@ -663,7 +667,7 @@ function HowSection() {
   ]
 
   return (
-    <section className="py-20 bg-white">
+    <section id="como-solicitar" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-5">
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
@@ -704,7 +708,7 @@ function HowSection() {
 
 function CtaSection() {
   return (
-    <section className="py-20" style={{ background: 'linear-gradient(135deg, #f0faf8, #EBF3FB)' }}>
+    <section id="cta" className="py-20" style={{ background: 'linear-gradient(135deg, #f0faf8, #EBF3FB)' }}>
       <div className="max-w-2xl mx-auto px-5 text-center">
         <div className="text-5xl mb-6">🏡</div>
         <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
@@ -810,10 +814,11 @@ function ContactSection() {
                   { name: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 XXXX XXXX' },
                 ].map(({ name, label, type, placeholder }) => (
                   <div key={name}>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
+                    <label htmlFor={`campo-${name}`} className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
                       {label}
                     </label>
                     <input
+                      id={`campo-${name}`}
                       type={type}
                       name={name}
                       value={form[name as keyof typeof form]}
@@ -832,10 +837,11 @@ function ContactSection() {
                   </div>
                 ))}
                 <div>
-                  <label className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
+                  <label htmlFor="campo-comuna" className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
                     Comuna
                   </label>
                   <select
+                    id="campo-comuna"
                     name="comuna"
                     value={form.comuna}
                     onChange={handleChange}
@@ -849,10 +855,11 @@ function ContactSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
+                  <label htmlFor="campo-atencion" className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
                     ¿Qué atención necesitas?
                   </label>
                   <textarea
+                    id="campo-atencion"
                     name="atencion"
                     value={form.atencion}
                     onChange={handleChange}
@@ -929,7 +936,7 @@ function FloatingWhatsApp() {
       href={wa('Hola, me gustaría consultar sobre atención de enfermería a domicilio.')}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-2xl transition-all hover:scale-110 active:scale-95"
+      className="hidden md:flex fixed bottom-6 right-5 z-50 w-14 h-14 rounded-full items-center justify-center text-white shadow-2xl transition-all hover:scale-110 active:scale-95"
       style={{ background: '#25D366', boxShadow: '0 4px 24px rgba(37,211,102,0.5)' }}
       aria-label="Contactar por WhatsApp"
     >
@@ -968,8 +975,9 @@ function MobileBottomBar() {
 // ── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
+  // pb-24 en móvil: deja espacio para MobileBottomBar (fija) y evita que tape el footer
   return (
-    <div style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
+    <div className="pb-24 md:pb-0" style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
       <Header />
       <main>
         <Hero />

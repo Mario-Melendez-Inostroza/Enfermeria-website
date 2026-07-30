@@ -1,0 +1,11 @@
+{
+  "title": "Salud y Estética en tu Hogar",
+  "description": "Atención de enfermería y servicios estéticos a domicilio en Santiago: curaciones, inyecciones, controles, manejo del dolor, botox, ácido hialurónico y más, en la comodidad de tu hogar.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+
+  --color-teal-50: #f0faf8;
+  --color-teal-100: #d6f2ed;
+  --color-teal-200: #aee4da;
+  --color-teal-300: #77cec2;
+  --color-teal-400: #43b2a4;
+  --color-teal-500: #2DB9A0;
+  --color-teal-600: #229487;
+  --color-teal-700: #1d766d;
+  --color-teal-800: #1a5e58;
+  --color-teal-900: #184e48;
+
+  --color-blue-soft: #5B9BD5;
+  --color-blue-light: #EBF3FB;
+  --color-warm-50: #FEF7F0;
+  --color-warm-400: #F5A07D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #ffffff;
+  color: #1a2e2b;
+}
+
+.font-display {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-body {
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+/* Hide scrollbar until scrolling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #aee4da;
+  border-radius: 3px;
+  opacity: 0;
+}

@@ -171,7 +171,7 @@ function Header() {
       <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
         {/* Logo */}
         <a href="#inicio" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center"
+          <div className="w-11 h-11 rounded-full flex items-center justify-center"
             style={{ background: 'linear-gradient(135deg, #2DB9A0, #5B9BD5)' }}>
             <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4-4h-2V8h2v4zm0 4h-2v-2h2v2z" />
@@ -179,8 +179,8 @@ function Header() {
             </svg>
           </div>
           <div className="leading-tight">
-            <div className="font-display font-semibold text-teal-700 text-sm group-hover:text-teal-600 transition-colors"
-              style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1d766d' }}>
+            <div className="font-display font-bold text-lg group-hover:text-teal-600 transition-colors"
+              style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
               Salud y Estética
             </div>
             <div className="text-xs text-gray-500 font-body -mt-0.5">en tu Hogar</div>

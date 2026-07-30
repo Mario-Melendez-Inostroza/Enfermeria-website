@@ -5,7 +5,7 @@ const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER}`
 const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
 
-const HERO_IMG = '/images/sin-fondo.png'
+const HERO_IMG = '/images/hero.png'
 const ABOUT_IMG =
   'https://images.unsplash.com/photo-1484863137850-59afcfe05386?w=600&h=700&fit=crop&auto=format'
 
@@ -324,28 +324,17 @@ function Hero() {
         </div>
 
         {/* Image */}
-        <div className="relative">
+        <div className="relative md:-translate-y-5">
+          {/* Ambient contact shadow — grounds the cutout instead of leaving it "floating" */}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-2 w-1/2 h-3 -z-10 blur-xl pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse, rgba(26,46,43,0.14) 0%, transparent 75%)' }} />
           <img
             src={HERO_IMG}
             alt="Enfermera tomando la presión a un paciente adulto joven"
-            className="w-full h-[520px] object-contain"
-            style={{
-              maskImage: [
-                'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 6%, black 16%, black 86%, rgba(0,0,0,0.4) 94%, transparent 100%)',
-                'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 2%, black 4%, black 70%, rgba(0,0,0,0.5) 85%, transparent 100%)',
-              ].join(', '),
-              WebkitMaskImage: [
-                'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 6%, black 16%, black 86%, rgba(0,0,0,0.4) 94%, transparent 100%)',
-                'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 2%, black 4%, black 70%, rgba(0,0,0,0.5) 85%, transparent 100%)',
-              ].join(', '),
-              maskRepeat: 'no-repeat',
-              WebkitMaskRepeat: 'no-repeat',
-              maskComposite: 'intersect',
-              WebkitMaskComposite: 'source-in',
-            } as React.CSSProperties}
+            className="w-full h-auto max-h-[540px] mx-auto object-contain"
           />
           {/* Floating card */}
-          <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 max-w-52">
+          <div className="absolute -bottom-16 -left-3 sm:-left-5 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 max-w-52">
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: '#d6f2ed' }}>
               <span style={{ color: '#2DB9A0' }}>🏠</span>

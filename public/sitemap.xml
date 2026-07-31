@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Preparado para el lanzamiento. Mientras robots.index sea false, robots.txt sirve
+  "Disallow: /" y este sitemap no se rastrea. Al activar la indexación, revisar que
+  la URL coincida con el dominio definitivo.
+  Sitio de una sola página: las secciones son anclas (#servicios, #cobertura...),
+  no URLs propias, por eso hay una única entrada.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://enfermeria-website.vercel.app/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

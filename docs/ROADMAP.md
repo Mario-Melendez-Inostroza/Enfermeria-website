@@ -4,7 +4,8 @@ Memoria operativa del proceso de pasar el mockup de Figma a web lista para
 producción. Contexto del proyecto y convenciones: ver `../CLAUDE.md`.
 
 **Estado:** `[ ]` pendiente · `[x]` completado
-**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2 (parcial) · **Siguiente:** Etapa 4
+**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2 (parcial), 4 · **Siguiente:** Etapa 3
+**Dominio de producción:** `https://enfermeria-website.vercel.app` (confirmado en el panel de Vercel)
 
 ---
 
@@ -54,8 +55,8 @@ build limpio (~290ms, JS 67KB gzip) · cero errores de consola.
 |---|---|---|---|
 | M1 | **Sistema de diseño definido pero sin usar**: 86 `style={{}}` inline, 62 `fontFamily` repetidos, hex a mano (`#2DB9A0`×19, `#1a2e2b`×21, `#d6f2ed`×11); tokens `teal-100`/`teal-700`/`blue-soft`/`warm-*` con **0 usos** | Cambiar un color de marca exige ~20 ediciones manuales | Por partes: **45 `fontFamily:'Outfit'` son redundantes** (verificado: `html` ya la aplica y Fraunces solo va en elementos hoja) → borrar; Fraunces → `.font-display`; hex → tokens |
 | M2 | `src/imports/pasted_text/enfermeria-domicilio-stgo.html` (324 líneas) sin referenciar | Confunde: parece código vivo | Eliminar (queda en git) o mover a `docs/` |
-| M3 | Sin favicon | Icono genérico en pestaña y marcadores | Derivar del isotipo circular del header |
-| M4 | Faltan `og:image`, `og:url`, `og:type`, `og:locale`, Twitter Cards, `canonical` | **Al compartir por WhatsApp —canal principal— no sale imagen de vista previa** | Completar en `site.json` + `customScripts` |
+| ~~M3~~ | ~~Sin favicon~~ | — | ✅ Etapa 4 · `public/favicon.svg` derivado del isotipo |
+| ~~M4~~ | ~~Faltan `og:image`, `og:url`, `og:type`, `og:locale`, Twitter Cards, `canonical`~~ | — | ✅ Etapa 4 · metadatos completos + `og-image.jpg` 1200×630 |
 | M5 | Áreas táctiles: enlaces del menú móvil 20px de alto, hamburguesa 40×40 (mín. 44×44) | Toques fallidos; el público objetivo incluye personas mayores | Aumentar padding vertical y tamaño |
 | M6 | Sin `prefers-reduced-motion` (hay `animate-pulse` y transiciones) | Molesto con sensibilidad al movimiento | `@media (prefers-reduced-motion: reduce)` en `index.css` |
 
@@ -142,14 +143,42 @@ Corregir accesibilidad/SEO con cambios mínimos.
 
 - **Fin:** ✅ A6 cumplido y verificado · ⏳ A1 a la espera de la imagen definitiva.
 
-### [ ] Etapa 4 — SEO y compartir en redes · antes del lanzamiento
-Que el enlace se vea bien al compartirlo y sea indexable.
-- [ ] M3 · Favicon
-- [ ] M4 · `og:image`, `canonical`, Twitter Cards
-- [ ] B4 · `sitemap.xml`
-- [ ] C1 · **Activar indexación — solo con el visto bueno final de la clienta**
-- **Verificar:** validar la vista previa del enlace; comprobar `robots.txt` y metaetiquetas en el build.
-- **Fin:** enlace con vista previa correcta e indexable.
+### [x] Etapa 4 — SEO y compartir en redes · completada
+*(C1 —activar la indexación— queda deliberadamente fuera: se ejecutará en el lanzamiento,
+con la autorización de la clienta. Ver Etapa 6.)*
+
+- [x] **M3 · Favicon** — `public/favicon.svg`, reproducción vectorial 1:1 del isotipo del header
+      (círculo con degradado `#2DB9A0`→`#5B9BD5` + mismo glifo blanco). No se rediseñó nada.
+      Comprobado a 16/32/48/64/96 px: de 32 px en adelante se lee bien; **a 16 px el glifo
+      pierde detalle** y queda como marca de color (aceptable, es el tamaño de pestaña).
+- [x] **M4 · Open Graph y Twitter Cards completos** — `og:type`, `og:url`, `og:locale` (`es_CL`),
+      `og:site_name`, `og:image` (+ `width`/`height`/`type`/`alt`), `twitter:card`
+      (`summary_large_image`), `twitter:title/description/image/image:alt`, `canonical`,
+      `theme-color`, `author`, `geo.region`/`geo.placename`.
+- [x] **og:image** — `public/og-image.jpg`, 1200×630, **71 KB**. Compuesta **solo con la identidad
+      ya aprobada**: mismo isotipo, degradado del hero, blobs decorativos, tipografías Fraunces/Outfit
+      y textos literales del propio sitio (titular del hero + servicios reales). Sin identidad nueva.
+      Se generó en PNG (367 KB) y se pasó a **JPEG q92 → 71 KB (−81 %)** tras comparar recortes del
+      texto ampliado: sin artefactos visibles.
+- [x] **B4 · `sitemap.xml`** — preparado con una sola entrada (sitio de una página; las secciones
+      son anclas, no URLs). Namespace `sitemaps.org` validado.
+- [ ] **C1 · Activar indexación** — **sigue bloqueado a propósito** hasta que la clienta autorice.
+      Único cambio pendiente: `robots.index` a `true` en `site.json`. Movido a la Etapa 6 (lanzamiento).
+
+- **Verificado:** simulación del crawler leyendo **HTML crudo sin ejecutar JS** (así lo hacen
+  WhatsApp/Facebook/X): las 20 etiquetas presentes y correctas · `og:image` y `canonical` con
+  **URL absoluta** (WhatsApp no resuelve rutas relativas) · imagen realmente descargable
+  (HTTP 200, cabecera JPEG válida, < 300 KB) · **doble bloqueo de indexación intacto**
+  (`<meta robots="noindex, nofollow">` + `robots.txt` con `Disallow: /`) · `tsc` limpio ·
+  build OK · sin cambios visuales en desktop/tablet/mobile.
+
+> ✅ **Dominio confirmado** en el panel de Vercel: `https://enfermeria-website.vercel.app`.
+> Verificado en el build que lo usan `canonical`, `og:url`, `og:image`, `twitter:image` y
+> `sitemap.xml`, y que **no aparece ninguna URL de deployment con sufijo** (esas cambian en
+> cada despliegue y romperían la vista previa). Si algún día se contrata dominio propio, se
+> cambia en `site.json` (3 apariciones) y en `public/sitemap.xml`.
+
+- **Fin:** ✅ completada. Metadatos, recursos y dominio verificados. Solo queda C1 en el lanzamiento.
 
 ### [ ] Etapa 3 — Contraste, accesibilidad y header en tablet · requiere validación de la clienta
 Cumplir WCAG AA en elementos interactivos y corregir el apiñamiento del header.
@@ -170,11 +199,15 @@ Que modificar la marca deje de costar 20 ediciones.
 - **Fin:** sin regresiones visuales y con los tokens en uso.
 - **Riesgo:** bajo; hacerlo en **commits separados** para poder revertir.
 
-### [ ] Etapa 6 — QA final
+### [ ] Etapa 6 — QA final y lanzamiento
 - [ ] B5 · Actualizar dependencias
 - [ ] B2 · Validación del formulario
 - [ ] Repaso en los 6 viewports
 - [ ] Verificar el deploy en Vercel
+- [ ] **C1 · Activar la indexación** (`robots.index: true`) — **último paso, solo con la
+      autorización explícita de la clienta.** Después: comprobar que `robots.txt` deja de
+      servir `Disallow: /` y que desaparece `<meta name="robots" content="noindex, nofollow">`,
+      y validar la vista previa del enlace en WhatsApp con el sitio ya publicado.
 - **Fin:** build limpio, sin errores de consola, aprobación de la clienta.
 
 ---

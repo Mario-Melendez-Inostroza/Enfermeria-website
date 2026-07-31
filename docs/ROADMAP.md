@@ -4,7 +4,7 @@ Memoria operativa del proceso de pasar el mockup de Figma a web lista para
 producción. Contexto del proyecto y convenciones: ver `../CLAUDE.md`.
 
 **Estado:** `[ ]` pendiente · `[x]` completado
-**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1 · **Siguiente:** Etapa 2
+**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2 (parcial) · **Siguiente:** Etapa 4
 
 ---
 
@@ -47,6 +47,7 @@ build limpio (~290ms, JS 67KB gzip) · cero errores de consola.
 | A4 | Burbuja WhatsApp **solapa** la barra inferior fija; `body` sin `padding-bottom` tapa el final del footer | Dos botones encimados (descuidado) + contenido oculto | Ocultar burbuja en móvil (`hidden md:flex`) + padding inferior |
 | A5 | Contraste: `#2DB9A0` sobre blanco = **2.45:1** (requiere 4.5:1) en "Ver servicios" y "Llamar"; eyebrow "Sobre mí" 2.64:1 | CTAs poco legibles con baja visión o reflejos | Texto a `#1d766d` (5.4:1), ya en la paleta. Borde/acento sin cambios |
 | A6 | Fuentes por `@import` en CSS → cadena bloqueante HTML→CSS→Google→fuentes | Retrasa el primer render | `preconnect` + `link` vía `customScripts.headStart` |
+| **A7** | **Header apiñado entre 768 y ~820 px**: la nav de escritorio aparece en `md:` (768 px) sin espacio suficiente → el logo se parte en dos líneas, "Sobre mí" se parte y "Contacto" queda pegado/tapado por el botón de WhatsApp. Medido: a 768–808 px `nav.right == cta.left` (separación 0). A partir de 828 px se ve bien. | Defecto visible en tablets en vertical (iPad 768/810 px) — clase de dispositivo habitual | Subir el breakpoint de la nav a `lg:` (1024 px) y mostrar el menú hamburguesa por debajo, **o** acortar el CTA a "Agendar". Requiere decisión visual → **Etapa 3** |
 
 ### 🟡 Medio
 | # | Problema | Impacto | Solución |
@@ -102,13 +103,44 @@ Corregir accesibilidad/SEO con cambios mínimos.
 > el espaciado del menú móvil, pero eso es **M5** (áreas táctiles) y pertenece a la
 > Etapa 3, que requiere validación visual de la clienta. Se revirtió para no mezclar.
 
-### [ ] Etapa 2 — Performance · alto impacto, riesgo bajo
-Reducir el peso de la página ~90%.
-- [ ] A1 · Hero a WebP + `width`/`height` + `fetchpriority`
-- [ ] A6 · `preconnect` de fuentes
-- **Verificar:** medir de nuevo peso de recursos y LCP; **comparar capturas antes/después** de la imagen.
-- **Fin:** hero < 150 KB sin degradación visual apreciable.
-- **Riesgo:** validar la calidad de la imagen lado a lado antes de aceptar.
+### [~] Etapa 2 — Performance · A6 completado · A1 en espera de la imagen definitiva
+
+- [x] **A6 · Fuentes fuera de la cadena de bloqueo**
+  - `@import` eliminado de `src/index.css`; ahora `preconnect` + `<link rel="stylesheet">` en el `<head>` vía `customScripts.headEnd` de `site.json`.
+  - Se usó `headEnd` (no `headStart`) para que `<meta charset>` siga siendo lo primero del `<head>`; las fuentes quedan igualmente antes del CSS de la app.
+  - **Pesos recortados a los realmente usados**, verificado en runtime: se usan Outfit 400/500/600 y Fraunces 600/700. Se eliminaron de la URL **Outfit 300 y 700, y Fraunces 400 e itálica**, que no se usaban.
+  - **Medido (build de producción, red emulada 4 Mbps / 60 ms latencia, media de varias pasadas):**
+
+    | Métrica | Antes | Después | Δ |
+    |---|---|---|---|
+    | CSS de fuentes | 9 595 B | 5 183 B | **−46 %** |
+    | Total fuentes | 106,6 KB | 102,3 KB | −4 % |
+    | 1ª petición de fuente arranca | 713 ms | ~450 ms | **−263 ms (−37 %)** |
+    | Última fuente lista | 867 ms | ~580 ms | **−287 ms (−33 %)** |
+    | FCP | 968 ms | ~795 ms | **−173 ms (−18 %)** |
+
+    Los archivos de fuente pesan lo mismo (97,3 KB): Google sirve fuentes variables y el
+    navegador ya descargaba solo el subconjunto latino. La ganancia real está en **eliminar
+    el salto de la cadena** (antes el CSS de fuentes no arrancaba hasta que se descargaba y
+    parseaba `index.css`) y en un CSS de fuentes casi la mitad de grande.
+  - **Sin regresión visual:** antes y después se descargan **exactamente las mismas 5 font-faces**
+    (Fraunces 600/700, Outfit 400/500/600) y se usan las mismas 6 combinaciones. Verificado en
+    desktop/tablet/mobile con `document.fonts.ready` antes de capturar.
+
+- [x] **A1 (parcial) · `fetchpriority="high"` en el `<img>` del hero** — independiente de qué
+      imagen se use, así que sirve igual con la definitiva.
+- [ ] **A1 (pendiente) · Optimizar el asset del hero** — **la clienta va a sustituir la imagen**,
+      así que convertir la actual sería trabajo desechable. Se hará cuando llegue la definitiva.
+
+  > **Procedimiento para la imagen definitiva** (medido sobre la actual: 1342 KB → 109 KB, −92 %):
+  > 1. Redimensionar a ~1100 px de ancho (se renderiza a 532 px; 1100 cubre pantallas 2×).
+  > 2. Exportar a **WebP calidad 82** conservando el canal alfa (`Image.save(..., 'WEBP', quality=82, method=6)`).
+  > 3. Añadir `width`/`height` al `<img>` con las dimensiones reales → evita CLS.
+  >    **No se han puesto ahora a propósito:** con la imagen actual quedarían obsoletos y
+  >    provocarían una reserva de espacio con proporción incorrecta.
+  > 4. Comparar visualmente antes/después y comprobar que la transparencia se mantiene.
+
+- **Fin:** ✅ A6 cumplido y verificado · ⏳ A1 a la espera de la imagen definitiva.
 
 ### [ ] Etapa 4 — SEO y compartir en redes · antes del lanzamiento
 Que el enlace se vea bien al compartirlo y sea indexable.
@@ -119,9 +151,10 @@ Que el enlace se vea bien al compartirlo y sea indexable.
 - **Verificar:** validar la vista previa del enlace; comprobar `robots.txt` y metaetiquetas en el build.
 - **Fin:** enlace con vista previa correcta e indexable.
 
-### [ ] Etapa 3 — Contraste y accesibilidad · requiere validación de la clienta
-Cumplir WCAG AA en elementos interactivos.
+### [ ] Etapa 3 — Contraste, accesibilidad y header en tablet · requiere validación de la clienta
+Cumplir WCAG AA en elementos interactivos y corregir el apiñamiento del header.
 - [ ] A5 · Texto de botones a `#1d766d`
+- [ ] **A7 · Header apiñado en 768–820 px** (descubierto durante la Etapa 2; ver tabla de hallazgos)
 - [ ] M5 · Áreas táctiles ≥ 44px
 - [ ] M6 · `prefers-reduced-motion`
 - **Verificar:** re-medir contraste; todos los interactivos ≥ 4.5:1.

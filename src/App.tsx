@@ -333,6 +333,7 @@ function Hero() {
           <img
             src={HERO_IMG}
             alt="Enfermera tomando la presión a un paciente adulto joven"
+            fetchPriority="high"
             className="w-full h-auto max-h-[540px] mx-auto object-contain"
           />
           {/* Floating card */}

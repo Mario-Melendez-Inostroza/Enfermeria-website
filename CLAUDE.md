@@ -55,6 +55,11 @@ directamente** para metadatos — se configuran en `site.json`.
   (línea ~5). Nunca escribir una URL `wa.me` a mano.
 - Todo enlace externo lleva `target="_blank"` + `rel="noopener noreferrer"`.
 - Contenido en español de Chile. El sitio no tiene i18n ni la necesita.
+- **Fuentes:** se cargan desde el `<head>` (`customScripts.headEnd` en `site.json`), no con
+  `@import` en el CSS. La URL pide **solo los pesos en uso**: Outfit 400/500/600 y
+  Fraunces 600/700. Si añades un peso nuevo (p. ej. `font-bold` en texto de cuerpo, que
+  sería Outfit 700), **agrégalo también a esa URL**; si no, el navegador lo sintetiza y
+  se ve peor.
 
 ## Identidad visual (no cambiar sin pedirlo la clienta)
 

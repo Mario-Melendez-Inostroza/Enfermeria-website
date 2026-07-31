@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+/* Las fuentes se cargan con <link rel="preconnect"> + <link rel="stylesheet"> desde
+   el <head> (ver customScripts.headStart en .figma/make/site.json). Con @import aquí
+   quedaban encadenadas detrás de este CSS y no arrancaban hasta ~700 ms. */
 @import 'tailwindcss';
 
 @theme {

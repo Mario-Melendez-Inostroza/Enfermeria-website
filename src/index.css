@@ -47,6 +47,22 @@ body {
   font-family: 'Outfit', system-ui, sans-serif;
 }
 
+/* Respeta a quien pide reducir el movimiento en su sistema operativo.
+   Cubre animaciones, transiciones y el scroll suave del anclaje del menú. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Hide scrollbar until scrolling */
 ::-webkit-scrollbar {
   width: 6px;

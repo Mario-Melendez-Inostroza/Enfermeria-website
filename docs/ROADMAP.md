@@ -4,7 +4,7 @@ Memoria operativa del proceso de pasar el mockup de Figma a web lista para
 producción. Contexto del proyecto y convenciones: ver `../CLAUDE.md`.
 
 **Estado:** `[ ]` pendiente · `[x]` completado
-**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2 (parcial), 4 · **Siguiente:** Etapa 3
+**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2, 3, 4 · **Siguiente:** Etapa 5
 **Dominio de producción:** `https://enfermeria-website.vercel.app` (confirmado en el panel de Vercel)
 
 ---
@@ -42,13 +42,13 @@ build limpio (~290ms, JS 67KB gzip) · cero errores de consola.
 ### 🟠 Alto
 | # | Problema | Impacto | Solución |
 |---|---|---|---|
-| A1 | `hero.png` 1342 KB, 1305×1060 renderizado a 532×432, **es el LCP** | ~80% del peso de la página; mala carga en datos móviles | WebP ~1100px: **1342 KB → 109 KB (−92%)**, medido. Añadir `width`/`height` + `fetchpriority="high"` |
+| ~~A1~~ | ~~`hero.png` 1342 KB, 1305×1060 renderizado a 532×432, **es el LCP**~~ | ~~~80% del peso de la página~~ | ✅ Resuelto con la imagen definitiva: `hero.webp` **96 KB**, `width`/`height` + `fetchpriority="high"` |
 | A2 | Los 4 campos del formulario sin `id`/`htmlFor` | Lectores de pantalla no anuncian el campo; clicar el label no enfoca | Asociar `id` ↔ `htmlFor` |
 | A3 | Botón hamburguesa sin `aria-label`/`aria-expanded`/`type` | No comunica función ni estado abierto/cerrado | Añadir atributos ARIA |
 | A4 | Burbuja WhatsApp **solapa** la barra inferior fija; `body` sin `padding-bottom` tapa el final del footer | Dos botones encimados (descuidado) + contenido oculto | Ocultar burbuja en móvil (`hidden md:flex`) + padding inferior |
-| A5 | Contraste: `#2DB9A0` sobre blanco = **2.45:1** (requiere 4.5:1) en "Ver servicios" y "Llamar"; eyebrow "Sobre mí" 2.64:1 | CTAs poco legibles con baja visión o reflejos | Texto a `#1d766d` (5.4:1), ya en la paleta. Borde/acento sin cambios |
+| ~~A5~~ | ~~Contraste: `#2DB9A0` sobre blanco = 2.45:1 en "Ver servicios" y "Llamar"; eyebrow "Sobre mí" 2.64:1~~ | — | ✅ Etapa 3 · texto a `#1d766d` / `#356E9E`. *Queda solo el h1, a decisión de la clienta* |
 | A6 | Fuentes por `@import` en CSS → cadena bloqueante HTML→CSS→Google→fuentes | Retrasa el primer render | `preconnect` + `link` vía `customScripts.headStart` |
-| **A7** | **Header apiñado entre 768 y ~820 px**: la nav de escritorio aparece en `md:` (768 px) sin espacio suficiente → el logo se parte en dos líneas, "Sobre mí" se parte y "Contacto" queda pegado/tapado por el botón de WhatsApp. Medido: a 768–808 px `nav.right == cta.left` (separación 0). A partir de 828 px se ve bien. | Defecto visible en tablets en vertical (iPad 768/810 px) — clase de dispositivo habitual | Subir el breakpoint de la nav a `lg:` (1024 px) y mostrar el menú hamburguesa por debajo, **o** acortar el CTA a "Agendar". Requiere decisión visual → **Etapa 3** |
+| ~~A7~~ | ~~Header apiñado entre 768 y ~820 px: logo partido en dos líneas y "Contacto" tapado por el botón de WhatsApp~~ | — | ✅ Etapa 3 · nav y CTA movidos a `lg:` (1024 px); hamburguesa por debajo |
 
 ### 🟡 Medio
 | # | Problema | Impacto | Solución |
@@ -57,8 +57,8 @@ build limpio (~290ms, JS 67KB gzip) · cero errores de consola.
 | M2 | `src/imports/pasted_text/enfermeria-domicilio-stgo.html` (324 líneas) sin referenciar | Confunde: parece código vivo | Eliminar (queda en git) o mover a `docs/` |
 | ~~M3~~ | ~~Sin favicon~~ | — | ✅ Etapa 4 · `public/favicon.svg` derivado del isotipo |
 | ~~M4~~ | ~~Faltan `og:image`, `og:url`, `og:type`, `og:locale`, Twitter Cards, `canonical`~~ | — | ✅ Etapa 4 · metadatos completos + `og-image.jpg` 1200×630 |
-| M5 | Áreas táctiles: enlaces del menú móvil 20px de alto, hamburguesa 40×40 (mín. 44×44) | Toques fallidos; el público objetivo incluye personas mayores | Aumentar padding vertical y tamaño |
-| M6 | Sin `prefers-reduced-motion` (hay `animate-pulse` y transiciones) | Molesto con sensibilidad al movimiento | `@media (prefers-reduced-motion: reduce)` en `index.css` |
+| ~~M5~~ | ~~Áreas táctiles: enlaces de 20px de alto, hamburguesa 40×40~~ (eran los del **footer**, no los del menú) | — | ✅ Etapa 3 · hamburguesa 48px, menú y footer con `min-h-11` |
+| ~~M6~~ | ~~Sin `prefers-reduced-motion`~~ | — | ✅ Etapa 3 · bloque en `index.css` (incluye `scroll-behavior`) |
 
 ### 🟢 Bajo
 | # | Problema | Solución |
@@ -104,7 +104,7 @@ Corregir accesibilidad/SEO con cambios mínimos.
 > el espaciado del menú móvil, pero eso es **M5** (áreas táctiles) y pertenece a la
 > Etapa 3, que requiere validación visual de la clienta. Se revirtió para no mezclar.
 
-### [~] Etapa 2 — Performance · A6 completado · A1 en espera de la imagen definitiva
+### [x] Etapa 2 — Performance · completada
 
 - [x] **A6 · Fuentes fuera de la cadena de bloqueo**
   - `@import` eliminado de `src/index.css`; ahora `preconnect` + `<link rel="stylesheet">` en el `<head>` vía `customScripts.headEnd` de `site.json`.
@@ -130,18 +130,13 @@ Corregir accesibilidad/SEO con cambios mínimos.
 
 - [x] **A1 (parcial) · `fetchpriority="high"` en el `<img>` del hero** — independiente de qué
       imagen se use, así que sirve igual con la definitiva.
-- [ ] **A1 (pendiente) · Optimizar el asset del hero** — **la clienta va a sustituir la imagen**,
-      así que convertir la actual sería trabajo desechable. Se hará cuando llegue la definitiva.
+- [x] **A1 (completado el 2026-08-02, al llegar la imagen definitiva)** — ver
+      "Petición de la clienta" más abajo. `imagen_final.png` (2448 KB) → `hero.webp`
+      (**96 KB, −96 %**), 1240×907, calidad 82, PSNR 37,4 dB. Añadidos `width`/`height`
+      (se habían omitido a propósito mientras la imagen no era definitiva).
+      Medido: **página completa 444 KB, LCP 568 ms**.
 
-  > **Procedimiento para la imagen definitiva** (medido sobre la actual: 1342 KB → 109 KB, −92 %):
-  > 1. Redimensionar a ~1100 px de ancho (se renderiza a 532 px; 1100 cubre pantallas 2×).
-  > 2. Exportar a **WebP calidad 82** conservando el canal alfa (`Image.save(..., 'WEBP', quality=82, method=6)`).
-  > 3. Añadir `width`/`height` al `<img>` con las dimensiones reales → evita CLS.
-  >    **No se han puesto ahora a propósito:** con la imagen actual quedarían obsoletos y
-  >    provocarían una reserva de espacio con proporción incorrecta.
-  > 4. Comparar visualmente antes/después y comprobar que la transparencia se mantiene.
-
-- **Fin:** ✅ A6 cumplido y verificado · ⏳ A1 a la espera de la imagen definitiva.
+- **Fin:** ✅ A6 y A1 cumplidos y verificados.
 
 ### [x] Etapa 4 — SEO y compartir en redes · completada
 *(C1 —activar la indexación— queda deliberadamente fuera: se ejecutará en el lanzamiento,
@@ -180,15 +175,94 @@ con la autorización de la clienta. Ver Etapa 6.)*
 
 - **Fin:** ✅ completada. Metadatos, recursos y dominio verificados. Solo queda C1 en el lanzamiento.
 
-### [ ] Etapa 3 — Contraste, accesibilidad y header en tablet · requiere validación de la clienta
-Cumplir WCAG AA en elementos interactivos y corregir el apiñamiento del header.
-- [ ] A5 · Texto de botones a `#1d766d`
-- [ ] **A7 · Header apiñado en 768–820 px** (descubierto durante la Etapa 2; ver tabla de hallazgos)
-- [ ] M5 · Áreas táctiles ≥ 44px
-- [ ] M6 · `prefers-reduced-motion`
-- **Verificar:** re-medir contraste; todos los interactivos ≥ 4.5:1.
-- **Fin:** sin fallos AA en CTAs.
-- **Riesgo:** **cambio visual sutil** — mostrar comparativa a la clienta antes de confirmar.
+### [x] Petición directa de la clienta (2026-08-02) — fuera del plan de etapas
+
+Tres cambios pedidos tras revisar el preview. **Sí procedía tocar la identidad visual**
+porque los pidió ella (ver la regla en `CLAUDE.md`).
+
+- [x] **Logo del header más grande y más marcado** — "Salud y Estética" de `text-lg` a
+      `text-2xl` y de `#1a2e2b` a `#12211F`; "en tu Hogar" de `text-xs`/`gray-500` a
+      `text-sm`/`#4a6663`. El isotipo circular **no se tocó** (es la base del favicon).
+      Fraunces 700 ya estaba en la URL de fuentes: no hizo falta añadir pesos.
+- [x] **"Curaciones" → "Curaciones avanzadas"** en Servicios Enfermería.
+- [x] **Imagen definitiva del Hero** (`imagen_final.png` → `public/images/hero.webp`).
+
+> **La técnica anterior no servía.** La imagen previa era un recorte con transparencia
+> real hecho con `rembg`; la nueva es una **foto completa de la escena, en RGB, sin
+> ningún píxel transparente**. Como enfermera y paciente están **sentados** (silla y
+> sofá), recortar solo a las personas los habría dejado flotando en el aire. Decisión
+> acordada con el cliente: **foto completa con los bordes fundidos hacia el degradado
+> del Hero.**
+
+**Cómo se integró** (`HERO_MASK_X`/`HERO_MASK_Y` en `src/App.tsx`):
+
+1. **Margen de sacrificio horneado en el asset.** Los sujetos llegaban casi al borde del
+   encuadre, así que cualquier fundido lo bastante ancho para no leerse como rectángulo
+   se los comía. Se amplió el lienzo (150/150/130/190 px) rellenando con los bordes
+   propios extendidos y desenfocados. Esa franja se disuelve entera: **solo existe para
+   que el fundido no toque a las personas.**
+2. **Un degradado de máscara por eje, en elementos anidados.** Al anidarlos se
+   multiplican de forma natural. Se descartó `mask-composite: intersect` porque **no se
+   aplicó** (verificado en Chromium): las dos capas se unían en vez de intersectarse, y
+   el fundido horizontal quedaba anulado por el vertical.
+3. **La escala (`scale-110`) va en el elemento enmascarado, no en el `<img>` interior.**
+   Puesta dentro, la imagen se salía de la caja de la máscara y, como `mask-repeat` es
+   `repeat` por defecto, el degradado se **repetía** y reaparecía el borde duro.
+
+Al ser una máscara y no una superposición, lo que asoma por el borde es el propio fondo
+de la sección: **no puede aparecer halo blanco.** Se eliminó la sombra de contacto, que
+existía para apoyar el recorte transparente en el suelo y ya no tenía sentido.
+
+**Verificado:** transición de borde **medida píxel a píxel** en los cuatro lados —
+gradual, sin ningún escalón (fue necesario, porque a ojo parecía un corte duro y el
+contraste del propio contenido engañaba) · calidad WebP **PSNR 37,4 dB**, indistinguible
+al 200 % de zoom sobre los rostros · **página 444 KB, LCP 568 ms** · logo en una sola
+línea y sin colisión con la nav a 768/900/1024/1100/1200/1280/1440 px (sin regresión de
+A7) · 0 overflow y 0 errores de consola en los 6 viewports · `tsc` y build limpios.
+
+### [x] Etapa 3 — Contraste, accesibilidad y header en tablet · pendiente de visto bueno visual
+
+- [x] **A5 · Contraste WCAG AA en elementos interactivos.** Colores calculados, no elegidos a ojo:
+
+  | Elemento | Antes | Ahora | Ratio |
+  |---|---|---|---|
+  | Botón "Ver servicios" | `#2DB9A0` 2,45:1 ✗ | `#1d766d` | **5,43:1** ✓ |
+  | Botón "Llamar" (barra móvil) | `#2DB9A0` 2,45:1 ✗ | `#1d766d` | **5,43:1** ✓ |
+  | Check ✓ de los trust badges | `#2DB9A0` 2,45:1 ✗ | `#1d766d` | **5,43:1** ✓ |
+  | Eyebrow "Sobre mí" | `#5B9BD5` 2,64:1 ✗ | `#356E9E` | **4,84:1** ✓ |
+
+  `#1d766d` es el teal-700 que **ya estaba en la paleta**. `#356E9E` es la versión oscura del
+  azul de marca `#5B9BD5` (la paleta no tenía un azul oscuro). **Los bordes teal `#2DB9A0` se
+  mantienen**: solo se oscureció el texto, así que la identidad no cambia.
+
+- [x] **A7 · Header apiñado en tablet.** Nav y CTA pasan de `md:` (768 px) a `lg:` (1024 px); por
+      debajo se muestra el menú hamburguesa. Verificado a 768/800/820/900/1000/1024/1280 px:
+      **sin logo partido y sin colisión** en ningún ancho.
+
+- [x] **M5 · Áreas táctiles ≥ 44 px.** Hamburguesa `p-2`→`p-3` (40→48 px), enlaces del menú móvil
+      con `min-h-11`, y **enlaces del footer** (que en realidad eran los que medían 20 px —
+      ver nota abajo). Verificado: **0 elementos interactivos por debajo de 44 px**.
+
+- [x] **M6 · `prefers-reduced-motion`.** Bloque en `index.css` que neutraliza animaciones y
+      transiciones e incluye `scroll-behavior: auto` (el scroll suave también es movimiento).
+      Verificado con `reducedMotion: 'reduce'` y comprobado que **sin la preferencia el sitio
+      sigue animando igual**.
+
+- [ ] **Pendiente de decisión de la clienta — h1 del hero.** "en la tranquilidad" en `#2DB9A0`
+      da **2,45:1** y a 60 px necesitaría 3:1. **No se ha cambiado** porque es el elemento más
+      identitario del sitio. Propuesta preparada: `#229487` (**teal-600, ya en la paleta**) →
+      **3,71:1**, cumple AA con un oscurecimiento apenas perceptible. Es un cambio de una línea
+      en `src/App.tsx` (`<span style={{ color: ... }}>` del h1).
+
+> **Corrección de la auditoría inicial:** M5 decía "enlaces del menú móvil 20 px". Al verificar
+> con el menú **abierto** resultó que los de 20 px eran los del **footer** (4 enlaces: Inicio,
+> Servicios, Cobertura, Contacto); la medición original se hizo con el menú cerrado y los
+> atribuyó mal. Se corrigieron ambos.
+
+- **Verificado:** contraste re-medido sobre el fondo realmente pintado · header en 7 anchos ·
+  0 interactivos < 44 px · reduced-motion activo y desactivado · 0 overflow en los 6 viewports ·
+  0 errores de consola · `tsc` limpio · build OK · comparativas antes/después generadas.
+- **Fin:** ✅ sin fallos AA en CTAs. Falta solo el visto bueno visual de la clienta y su decisión sobre el h1.
 
 ### [ ] Etapa 5 — Mantenibilidad · sin cambio visual
 Que modificar la marca deje de costar 20 ediciones.

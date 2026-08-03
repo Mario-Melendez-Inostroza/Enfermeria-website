@@ -5,7 +5,16 @@ const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER}`
 const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
 
-const HERO_IMG = '/images/hero.png'
+const HERO_IMG = '/images/hero.webp'
+// Fundido de los bordes de la foto del Hero hacia el fondo de la sección.
+// Un degradado por eje, intersectados: cada lado se disuelve por completo antes de
+// llegar al borde de la caja, así que no queda ningún corte recto. La franja que se
+// disuelve es margen sobrante del encuadre; enfermera y paciente quedan intactos.
+// Se aplica una por eje en elementos anidados (en vez de dos capas con
+// `mask-composite: intersect`, que no es fiable entre navegadores): al anidarlas se
+// multiplican de forma natural y el soporte es universal.
+const HERO_MASK_X = 'linear-gradient(to right, transparent 0%, #000 22%, #000 80%, transparent 100%)'
+const HERO_MASK_Y = 'linear-gradient(to bottom, transparent 0%, #000 17%, #000 84%, transparent 100%)'
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -179,16 +188,17 @@ function Header() {
             </svg>
           </div>
           <div className="leading-tight">
-            <div className="font-display font-bold text-lg group-hover:text-teal-600 transition-colors"
-              style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+            {/* Pedido de la clienta: logo más grande y más marcado (casi negro). */}
+            <div className="font-display font-bold text-2xl group-hover:text-teal-600 transition-colors"
+              style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#12211F' }}>
               Salud y Estética
             </div>
-            <div className="text-xs text-gray-500 font-body -mt-0.5">en tu Hogar</div>
+            <div className="text-sm font-body -mt-0.5" style={{ color: '#4a6663' }}>en tu Hogar</div>
           </div>
         </a>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-7">
+        {/* Desktop nav — a partir de lg: por debajo no cabe junto al logo y el CTA */}
+        <nav className="hidden lg:flex items-center gap-7">
           {navLinks.map(({ label, href }) => (
             <a
               key={href}
@@ -206,7 +216,7 @@ function Header() {
           href={wa('Hola, me gustaría agendar una atención de enfermería a domicilio.')}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 active:scale-95"
+          className="hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 active:scale-95"
           style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
         >
           <IconWhatsApp className="w-4 h-4" />
@@ -220,7 +230,7 @@ function Header() {
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
           aria-controls="menu-movil"
-          className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-teal-50 transition-colors"
+          className="lg:hidden p-3 rounded-lg text-gray-600 hover:bg-teal-50 transition-colors"
         >
           {open ? <IconClose /> : <IconMenu />}
         </button>
@@ -228,13 +238,13 @@ function Header() {
 
       {/* Mobile menu */}
       {open && (
-        <div id="menu-movil" className="md:hidden bg-white border-t border-gray-100 px-5 py-4 flex flex-col gap-4">
+        <div id="menu-movil" className="lg:hidden bg-white border-t border-gray-100 px-5 py-3 flex flex-col gap-1">
           {navLinks.map(({ label, href }) => (
             <a
               key={href}
               href={href}
               onClick={() => setOpen(false)}
-              className="text-gray-700 hover:text-teal-600 text-base font-medium py-1 transition-colors"
+              className="flex items-center text-gray-700 hover:text-teal-600 text-base font-medium min-h-11 py-2 transition-colors"
               style={{ fontFamily: 'Outfit, sans-serif' }}
             >
               {label}
@@ -245,7 +255,7 @@ function Header() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold transition-all"
+            className="flex items-center justify-center gap-2 mt-3 px-4 py-3 rounded-xl text-white font-semibold transition-all"
             style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
           >
             <IconWhatsApp className="w-5 h-5" />
@@ -297,7 +307,7 @@ function Hero() {
             {['Atención a domicilio', 'Trato personalizado', 'Precios accesibles'].map(item => (
               <div key={item} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm text-sm font-medium"
                 style={{ color: '#1d766d', fontFamily: 'Outfit, sans-serif' }}>
-                <span className="text-teal-500" style={{ color: '#2DB9A0' }}>✓</span>
+                <span style={{ color: '#1d766d' }}>✓</span>
                 {item}
               </div>
             ))}
@@ -318,7 +328,7 @@ function Hero() {
             <a
               href="#servicios"
               className="flex items-center gap-2 px-6 py-4 rounded-2xl font-semibold text-base transition-all hover:bg-teal-50 border-2"
-              style={{ color: '#2DB9A0', borderColor: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}
+              style={{ color: '#1d766d', borderColor: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}
             >
               Ver servicios
             </a>
@@ -327,15 +337,29 @@ function Hero() {
 
         {/* Image */}
         <div className="relative md:-translate-y-5">
-          {/* Ambient contact shadow — grounds the cutout instead of leaving it "floating" */}
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-2 w-1/2 h-3 -z-10 blur-xl pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse, rgba(26,46,43,0.14) 0%, transparent 75%)' }} />
-          <img
-            src={HERO_IMG}
-            alt="Enfermera tomando la presión a un paciente adulto joven"
-            fetchPriority="high"
-            className="w-full h-auto max-h-[540px] mx-auto object-contain"
-          />
+          {/*
+            La foto es rectangular (no es un recorte con transparencia), así que se
+            funde con el degradado del Hero mediante una máscara elíptica: opaca en el
+            centro —donde están los rostros— y desvaneciéndose en el borde exterior.
+            Al ser máscara y no superposición, lo que asoma es el propio fondo de la
+            sección: no puede aparecer halo blanco ni un corte recto.
+          */}
+          {/*
+            La escala va en el propio elemento enmascarado: si se aplicara al <img> de
+            dentro, este se saldría de la caja de la máscara del padre y el degradado se
+            repetiría (`mask-repeat` es `repeat` por defecto), reapareciendo el borde duro.
+          */}
+          <div className="scale-110" style={{ maskImage: HERO_MASK_X, WebkitMaskImage: HERO_MASK_X, maskRepeat: 'no-repeat', WebkitMaskRepeat: 'no-repeat' }}>
+            <img
+              src={HERO_IMG}
+              alt="Enfermera tomando la presión a un paciente adulto joven"
+              fetchPriority="high"
+              width={1240}
+              height={907}
+              className="w-full h-auto max-h-[560px] mx-auto object-contain"
+              style={{ maskImage: HERO_MASK_Y, WebkitMaskImage: HERO_MASK_Y, maskRepeat: 'no-repeat', WebkitMaskRepeat: 'no-repeat' }}
+            />
+          </div>
           {/* Floating card */}
           <div className="absolute -bottom-16 -left-3 sm:-left-5 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 max-w-52">
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
@@ -435,7 +459,7 @@ function NursingServicesSection() {
   const services: ServiceItem[] = [
     {
       icon: <IconBandage />,
-      title: 'Curaciones',
+      title: 'Curaciones avanzadas',
       desc: 'Curaciones de heridas realizadas con técnica profesional en la comodidad de tu hogar.',
       color: '#EBF3FB',
       iconColor: '#5B9BD5',
@@ -549,7 +573,7 @@ function AboutSection() {
         {/* Text */}
         <div>
           <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6"
-            style={{ background: '#EBF3FB', color: '#5B9BD5', fontFamily: 'Outfit, sans-serif' }}>
+            style={{ background: '#EBF3FB', color: '#356E9E', fontFamily: 'Outfit, sans-serif' }}>
             Sobre mí
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
@@ -910,10 +934,10 @@ function Footer() {
               "Cuidado profesional, cercano y accesible."
             </div>
           </div>
-          <nav className="flex flex-wrap gap-5 justify-center">
+          <nav className="flex flex-wrap gap-1 justify-center">
             {links.map(({ label, href }) => (
               <a key={href} href={href}
-                className="text-sm transition-colors hover:text-white"
+                className="inline-flex items-center min-h-11 px-3 text-sm transition-colors hover:text-white"
                 style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Outfit, sans-serif' }}>
                 {label}
               </a>
@@ -965,7 +989,7 @@ function MobileBottomBar() {
       <a
         href="tel:+56978649964"
         className="px-4 py-3.5 rounded-2xl font-semibold text-sm border-2 transition-all"
-        style={{ color: '#2DB9A0', borderColor: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}
+        style={{ color: '#1d766d', borderColor: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}
       >
         Llamar
       </a>

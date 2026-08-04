@@ -344,6 +344,29 @@ documentado en vez de improvisarlo (ver más abajo).
       capa de routing) — **verificar una vez con `securityheaders.com` o `curl -I`
       después del próximo deploy**, sobre todo que Google Fonts y los enlaces a
       WhatsApp sigan funcionando.
+
+  > **⚠️ Mantenimiento de la CSP — bloque JSON-LD (2026-08-03).** El `<script
+  > type="application/ld+json">` que inyecta `site.json` (datos estructurados
+  > `LocalBusiness`) es un `<script>` inline, y `script-src` en `vercel.json` aplica a
+  > **cualquier** `<script>` sin importar su `type` — sin permiso explícito el
+  > navegador lo bloquea en silencio, sin error visible en la página, solo pérdida de
+  > SEO. Por eso `script-src` en `vercel.json` incluye el **hash SHA-256 exacto** de
+  > ese bloque (`'sha256-2cm5UoZszpzLv6ILUAKjFxaeYC3wprS7LgfDouoPs7g='`), verificado
+  > empíricamente sirviendo el build con esa cabecera CSP real inyectada (0
+  > violaciones, JSON-LD parseado correctamente).
+  >
+  > **Si se edita el contenido del JSON-LD** (teléfono, dirección, comunas,
+  > descripción, o cualquier otro campo dentro de ese `<script>` en
+  > `customScripts.headEnd` de `site.json`) **hay que regenerar el hash** y
+  > actualizarlo en `vercel.json`, o el bloque completo dejará de pasar la CSP.
+  > Procedimiento: compilar (`pnpm run build`), extraer el contenido exacto entre
+  > `<script type="application/ld+json">` y `</script>` de `dist/index.html`, y
+  > calcular `sha256-` + base64 de ese texto (UTF-8, tal cual, sin recortar espacios).
+  >
+  > **No usar `'unsafe-inline'` en `script-src`** como atajo: eso permitiría *cualquier*
+  > script inline, no solo el JSON-LD, y anularía la protección principal que da la CSP
+  > contra XSS. El hash es más trabajo de mantener pero es la solución correcta.
+
 - [x] **Accesibilidad** — 2 `<nav>` (header/footer) sin distinguir → `aria-label`
       añadido a cada uno; menú móvil pasó de `<div>` a `<nav>` con su propio label;
       8 emoji/símbolos puramente decorativos (✓, 🏠, 🏡, 📱🕐📍) marcados

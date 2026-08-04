@@ -5,6 +5,11 @@ const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER}`
 const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
 
+// Pendiente: la clienta debe entregar sus URLs de Instagram y Facebook.
+// Al recibirlas, reemplazar aquí — no hace falta tocar el JSX.
+const INSTAGRAM_URL = ''
+const FACEBOOK_URL = ''
+
 const HERO_IMG = '/images/hero.webp'
 // Fundido de los bordes de la foto del Hero hacia el fondo de la sección.
 // Un degradado por eje, intersectados: cada lado se disuelve por completo antes de
@@ -132,6 +137,22 @@ function IconWhatsApp({ className = 'w-6 h-6' }: { className?: string }) {
   )
 }
 
+function IconInstagram({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.332.014 7.052.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+    </svg>
+  )
+}
+
+function IconFacebook({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+    </svg>
+  )
+}
+
 function IconMenu() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
@@ -181,7 +202,7 @@ function Header() {
         {/* Logo */}
         <a href="#inicio" className="flex items-center gap-3 group">
           <div className="w-11 h-11 rounded-full flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #2DB9A0, #5B9BD5)' }}>
+            style={{ background: 'linear-gradient(135deg, var(--color-teal-500), var(--color-blue-soft))' }}>
             <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4-4h-2V8h2v4zm0 4h-2v-2h2v2z" />
               <path d="M11 6h2v2h-2zM13 10h2v2h-2z" />
@@ -190,7 +211,7 @@ function Header() {
           <div className="leading-tight">
             {/* Pedido de la clienta: logo más grande y más marcado (casi negro). */}
             <div className="font-display font-bold text-2xl group-hover:text-teal-600 transition-colors"
-              style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#12211F' }}>
+              style={{ color: '#12211F' }}>
               Salud y Estética
             </div>
             <div className="text-sm font-body -mt-0.5" style={{ color: '#4a6663' }}>en tu Hogar</div>
@@ -204,7 +225,6 @@ function Header() {
               key={href}
               href={href}
               className="text-gray-600 hover:text-teal-600 transition-colors text-sm font-medium"
-              style={{ fontFamily: 'Outfit, sans-serif' }}
             >
               {label}
             </a>
@@ -217,7 +237,7 @@ function Header() {
           target="_blank"
           rel="noopener noreferrer"
           className="hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 active:scale-95"
-          style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
+          style={{ background: '#25D366' }}
         >
           <IconWhatsApp className="w-4 h-4" />
           Agendar por WhatsApp
@@ -245,7 +265,6 @@ function Header() {
               href={href}
               onClick={() => setOpen(false)}
               className="flex items-center text-gray-700 hover:text-teal-600 text-base font-medium min-h-11 py-2 transition-colors"
-              style={{ fontFamily: 'Outfit, sans-serif' }}
             >
               {label}
             </a>
@@ -256,7 +275,7 @@ function Header() {
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="flex items-center justify-center gap-2 mt-3 px-4 py-3 rounded-xl text-white font-semibold transition-all"
-            style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
+            style={{ background: '#25D366' }}
           >
             <IconWhatsApp className="w-5 h-5" />
             Agendar por WhatsApp
@@ -272,32 +291,32 @@ function Header() {
 function Hero() {
   return (
     <section id="inicio" className="pt-20 min-h-screen flex items-center relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #f0faf8 0%, #EBF3FB 50%, #f8f4f0 100%)' }}>
+      style={{ background: 'linear-gradient(135deg, var(--color-teal-50) 0%, var(--color-blue-light) 50%, #f8f4f0 100%)' }}>
 
       {/* Decorative blobs */}
       <div className="absolute top-20 right-0 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ background: '#2DB9A0' }} />
+        style={{ background: 'var(--color-teal-500)' }} />
       <div className="absolute bottom-10 left-0 w-64 h-64 rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ background: '#5B9BD5' }} />
+        style={{ background: 'var(--color-blue-soft)' }} />
 
       <div className="max-w-6xl mx-auto px-5 py-16 grid md:grid-cols-2 gap-12 items-center relative z-10">
         {/* Text */}
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium mb-6"
-            style={{ background: '#d6f2ed', color: '#1d766d', fontFamily: 'Outfit, sans-serif' }}>
-            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" style={{ background: '#2DB9A0' }} />
+            style={{ background: 'var(--color-teal-100)', color: 'var(--color-teal-700)' }}>
+            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" style={{ background: 'var(--color-teal-500)' }} />
             Disponible en Santiago
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-gray-900"
-            style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b', lineHeight: 1.15 }}>
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-gray-900"
+            style={{ color: '#1a2e2b', lineHeight: 1.15 }}>
             Cuidado profesional,<br />
-            <span style={{ color: '#2DB9A0' }}>en la tranquilidad</span><br />
+            <span style={{ color: 'var(--color-teal-600)' }}>en la tranquilidad</span><br />
             de tu hogar
           </h1>
 
           <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8"
-            style={{ fontFamily: 'Outfit, sans-serif', color: '#4a6663' }}>
+            style={{ color: '#4a6663' }}>
             Atención de enfermería a domicilio con un trato humano, cercano
             y a precios accesibles. Cuidamos de ti y de quienes más quieres.
           </p>
@@ -306,8 +325,8 @@ function Hero() {
           <div className="flex flex-wrap gap-3 mb-8">
             {['Atención a domicilio', 'Trato personalizado', 'Precios accesibles'].map(item => (
               <div key={item} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm text-sm font-medium"
-                style={{ color: '#1d766d', fontFamily: 'Outfit, sans-serif' }}>
-                <span style={{ color: '#1d766d' }}>✓</span>
+                style={{ color: 'var(--color-teal-700)' }}>
+                <span style={{ color: 'var(--color-teal-700)' }}>✓</span>
                 {item}
               </div>
             ))}
@@ -320,7 +339,7 @@ function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 px-6 py-4 rounded-2xl text-white font-semibold text-base transition-all hover:opacity-90 active:scale-95 shadow-lg"
-              style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif', boxShadow: '0 4px 20px rgba(37,211,102,0.35)' }}
+              style={{ background: '#25D366', boxShadow: '0 4px 20px rgba(37,211,102,0.35)' }}
             >
               <IconWhatsApp className="w-5 h-5" />
               Solicitar atención por WhatsApp
@@ -328,7 +347,7 @@ function Hero() {
             <a
               href="#servicios"
               className="flex items-center gap-2 px-6 py-4 rounded-2xl font-semibold text-base transition-all hover:bg-teal-50 border-2"
-              style={{ color: '#1d766d', borderColor: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}
+              style={{ color: 'var(--color-teal-700)', borderColor: 'var(--color-teal-500)' }}
             >
               Ver servicios
             </a>
@@ -363,12 +382,12 @@ function Hero() {
           {/* Floating card */}
           <div className="absolute -bottom-16 -left-3 sm:-left-5 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 max-w-52">
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: '#d6f2ed' }}>
-              <span style={{ color: '#2DB9A0' }}>🏠</span>
+              style={{ background: 'var(--color-teal-100)' }}>
+              <span style={{ color: 'var(--color-teal-500)' }}>🏠</span>
             </div>
             <div>
-              <div className="text-xs text-gray-500" style={{ fontFamily: 'Outfit, sans-serif' }}>Atención en</div>
-              <div className="font-semibold text-sm" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>Tu propio hogar</div>
+              <div className="text-xs text-gray-500">Atención en</div>
+              <div className="font-semibold text-sm" style={{ color: '#1a2e2b' }}>Tu propio hogar</div>
             </div>
           </div>
         </div>
@@ -407,10 +426,10 @@ function ServiceGroup({
       <div className="max-w-6xl mx-auto px-5">
         <div className="text-center mb-14">
           <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4"
-            style={{ background: '#d6f2ed', color: '#1d766d', fontFamily: 'Outfit, sans-serif' }}>
+            style={{ background: 'var(--color-teal-100)', color: 'var(--color-teal-700)' }}>
             {eyebrow}
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+          <h2 className="text-3xl md:text-4xl font-bold font-display" style={{ color: '#1a2e2b' }}>
             {title}
           </h2>
         </div>
@@ -424,10 +443,10 @@ function ServiceGroup({
                 style={{ background: iconColor }}>
                 {icon}
               </div>
-              <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+              <h3 className="text-xl font-semibold mb-3 font-display" style={{ color: '#1a2e2b' }}>
                 {cardTitle}
               </h3>
-              <p className="text-gray-600 leading-relaxed flex-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              <p className="text-gray-600 leading-relaxed flex-1">
                 {desc}
               </p>
             </div>
@@ -436,7 +455,7 @@ function ServiceGroup({
 
         {/* Todo en la comodidad de tu hogar */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5">
-          <p className="text-lg font-semibold text-center" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+          <p className="text-lg font-semibold text-center font-display" style={{ color: '#1a2e2b' }}>
             Todo en la comodidad de tu hogar
           </p>
           <a
@@ -444,7 +463,7 @@ function ServiceGroup({
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:opacity-90 active:scale-95 flex-shrink-0"
-            style={{ background: '#25D366', color: 'white', fontFamily: 'Outfit, sans-serif' }}
+            style={{ background: '#25D366', color: 'white' }}
           >
             <IconWhatsApp className="w-4 h-4" />
             Consultar por WhatsApp
@@ -461,43 +480,43 @@ function NursingServicesSection() {
       icon: <IconBandage />,
       title: 'Curaciones avanzadas',
       desc: 'Curaciones de heridas realizadas con técnica profesional en la comodidad de tu hogar.',
-      color: '#EBF3FB',
-      iconColor: '#5B9BD5',
+      color: 'var(--color-blue-light)',
+      iconColor: 'var(--color-blue-soft)',
     },
     {
       icon: <IconSyringe />,
       title: 'Inyecciones a domicilio',
       desc: 'Administración de inyecciones y tratamientos indicados por tu médico, sin salir de casa.',
-      color: '#f0faf8',
-      iconColor: '#2DB9A0',
+      color: 'var(--color-teal-50)',
+      iconColor: 'var(--color-teal-500)',
     },
     {
       icon: <IconClipboard />,
       title: 'Controles',
       desc: 'Control de signos vitales y seguimiento de tu estado de salud de forma periódica.',
-      color: '#EBF3FB',
-      iconColor: '#5B9BD5',
+      color: 'var(--color-blue-light)',
+      iconColor: 'var(--color-blue-soft)',
     },
     {
       icon: <IconPain />,
       title: 'Manejo del dolor',
       desc: 'Acompañamiento y cuidados de enfermería orientados al bienestar, comodidad y manejo indicado del dolor del paciente.',
-      color: '#f0faf8',
-      iconColor: '#2DB9A0',
+      color: 'var(--color-teal-50)',
+      iconColor: 'var(--color-teal-500)',
     },
     {
       icon: <IconCare />,
       title: 'Cuidado de enfermos',
       desc: 'Apoyo y cuidados de enfermería para personas que necesitan asistencia en su hogar, entregando tranquilidad tanto al paciente como a su familia.',
-      color: '#EBF3FB',
-      iconColor: '#5B9BD5',
+      color: 'var(--color-blue-light)',
+      iconColor: 'var(--color-blue-soft)',
     },
     {
       icon: <IconVial />,
       title: 'Toma de muestra a domicilio',
       desc: 'Toma de muestras de laboratorio en tu hogar, con traslado seguro para su análisis.',
-      color: '#f0faf8',
-      iconColor: '#2DB9A0',
+      color: 'var(--color-teal-50)',
+      iconColor: 'var(--color-teal-500)',
     },
   ]
 
@@ -519,29 +538,29 @@ function AestheticServicesSection() {
       icon: <IconDroplet />,
       title: 'Toxina botulínica (Botox)',
       desc: 'Aplicación de toxina botulínica para suavizar líneas de expresión, en un ambiente cómodo y seguro.',
-      color: '#EBF3FB',
-      iconColor: '#5B9BD5',
+      color: 'var(--color-blue-light)',
+      iconColor: 'var(--color-blue-soft)',
     },
     {
       icon: <IconBloodDrop />,
       title: 'Ácido hialurónico',
       desc: 'Tratamientos con ácido hialurónico para hidratar y realzar de forma natural.',
-      color: '#f0faf8',
-      iconColor: '#2DB9A0',
+      color: 'var(--color-teal-50)',
+      iconColor: 'var(--color-teal-500)',
     },
     {
       icon: <IconVial />,
       title: 'Plasma rico en plaquetas',
       desc: 'Tratamiento regenerativo con plasma rico en plaquetas para el cuidado de la piel.',
-      color: '#EBF3FB',
-      iconColor: '#5B9BD5',
+      color: 'var(--color-blue-light)',
+      iconColor: 'var(--color-blue-soft)',
     },
     {
       icon: <IconIVBag />,
       title: 'Sueroterapia (vitaminas a la vena)',
       desc: 'Sueros vitamínicos administrados por vía endovenosa para reforzar tu bienestar.',
-      color: '#f0faf8',
-      iconColor: '#2DB9A0',
+      color: 'var(--color-teal-50)',
+      iconColor: 'var(--color-teal-500)',
     },
   ]
 
@@ -573,13 +592,13 @@ function AboutSection() {
         {/* Text */}
         <div>
           <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6"
-            style={{ background: '#EBF3FB', color: '#356E9E', fontFamily: 'Outfit, sans-serif' }}>
+            style={{ background: 'var(--color-blue-light)', color: '#356E9E' }}>
             Sobre mí
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 font-display" style={{ color: '#1a2e2b' }}>
             Una atención más humana y cercana
           </h2>
-          <p className="text-lg text-gray-600 leading-relaxed mb-8" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <p className="text-lg text-gray-600 leading-relaxed mb-8">
             Soy una enfermera dedicada a entregar atención y cuidados a domicilio. Mi propósito
             es acompañar a cada paciente y su familia con respeto, responsabilidad y cercanía,
             facilitando el acceso a cuidados profesionales desde la comodidad de su hogar.
@@ -588,10 +607,10 @@ function AboutSection() {
             {trust.map(item => (
               <li key={item} className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-white"
-                  style={{ background: '#2DB9A0' }}>
+                  style={{ background: 'var(--color-teal-500)' }}>
                   <IconCheck />
                 </div>
-                <span className="text-gray-700 font-medium" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.05rem' }}>
+                <span className="text-gray-700 font-medium" style={{ fontSize: '1.05rem' }}>
                   {item}
                 </span>
               </li>
@@ -616,17 +635,17 @@ const COMUNAS = [
 
 function CoverageSection() {
   return (
-    <section id="cobertura" className="py-20" style={{ background: 'linear-gradient(135deg, #1a2e2b 0%, #1d766d 100%)' }}>
+    <section id="cobertura" className="py-20" style={{ background: 'linear-gradient(135deg, #1a2e2b 0%, var(--color-teal-700) 100%)' }}>
       <div className="max-w-6xl mx-auto px-5">
         <div className="text-center mb-12">
           <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4"
-            style={{ background: 'rgba(255,255,255,0.15)', color: 'white', fontFamily: 'Outfit, sans-serif' }}>
+            style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>
             Zona de atención
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white" style={{ fontFamily: 'Fraunces, Georgia, serif' }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white font-display">
             Atención a domicilio en tu comuna
           </h2>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.75)', fontFamily: 'Outfit, sans-serif' }}>
+          <p className="text-lg max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
             Actualmente realizo atenciones domiciliarias en distintos sectores de Santiago.
           </p>
         </div>
@@ -636,10 +655,10 @@ function CoverageSection() {
           {COMUNAS.map(comuna => (
             <div key={comuna}
               className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200">
-              <span style={{ color: '#77cec2' }}>
+              <span style={{ color: 'var(--color-teal-300)' }}>
                 <IconPin />
               </span>
-              <span className="text-white font-medium" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1rem' }}>
+              <span className="text-white font-medium" style={{ fontSize: '1rem' }}>
                 {comuna}
               </span>
             </div>
@@ -648,10 +667,10 @@ function CoverageSection() {
 
         {/* ¿Tu comuna no aparece? */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 text-center">
-          <h3 className="text-xl font-semibold text-white mb-2" style={{ fontFamily: 'Fraunces, Georgia, serif' }}>
+          <h3 className="text-xl font-semibold text-white mb-2 font-display">
             ¿Vives cerca pero tu comuna no aparece?
           </h3>
-          <p className="mb-6" style={{ color: 'rgba(255,255,255,0.75)', fontFamily: 'Outfit, sans-serif' }}>
+          <p className="mb-6" style={{ color: 'rgba(255,255,255,0.75)' }}>
             Consúltame directamente para revisar disponibilidad.
           </p>
           <a
@@ -659,7 +678,7 @@ function CoverageSection() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-white font-semibold transition-all hover:opacity-90 active:scale-95"
-            style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
+            style={{ background: '#25D366' }}
           >
             <IconWhatsApp className="w-5 h-5" />
             Consultar cobertura por WhatsApp
@@ -695,10 +714,10 @@ function HowSection() {
     <section id="como-solicitar" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-5">
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display" style={{ color: '#1a2e2b' }}>
             ¿Cómo solicitar una atención?
           </h2>
-          <p className="text-lg text-gray-500" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <p className="text-lg text-gray-500">
             Tres pasos simples, rápidos y transparentes.
           </p>
         </div>
@@ -706,19 +725,19 @@ function HowSection() {
         <div className="relative grid md:grid-cols-3 gap-6">
           {/* Connector line (desktop) */}
           <div className="hidden md:block absolute top-10 left-[calc(16.66%+1rem)] right-[calc(16.66%+1rem)] h-0.5"
-            style={{ background: 'linear-gradient(90deg, #2DB9A0, #5B9BD5)' }} />
+            style={{ background: 'linear-gradient(90deg, var(--color-teal-500), var(--color-blue-soft))' }} />
 
           {steps.map(({ num, title, desc }) => (
             <div key={num} className="relative flex flex-col items-center text-center p-8 rounded-3xl border"
-              style={{ borderColor: '#d6f2ed', background: '#f0faf8' }}>
-              <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-md relative z-10"
-                style={{ background: 'linear-gradient(135deg, #2DB9A0, #5B9BD5)', fontFamily: 'Fraunces, Georgia, serif' }}>
+              style={{ borderColor: 'var(--color-teal-100)', background: 'var(--color-teal-50)' }}>
+              <div className="font-display w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-md relative z-10"
+                style={{ background: 'linear-gradient(135deg, var(--color-teal-500), var(--color-blue-soft))' }}>
                 {num}
               </div>
-              <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+              <h3 className="text-xl font-semibold mb-3 font-display" style={{ color: '#1a2e2b' }}>
                 {title}
               </h3>
-              <p className="text-gray-600 leading-relaxed" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              <p className="text-gray-600 leading-relaxed">
                 {desc}
               </p>
             </div>
@@ -733,13 +752,13 @@ function HowSection() {
 
 function CtaSection() {
   return (
-    <section id="cta" className="py-20" style={{ background: 'linear-gradient(135deg, #f0faf8, #EBF3FB)' }}>
+    <section id="cta" className="py-20" style={{ background: 'linear-gradient(135deg, var(--color-teal-50), var(--color-blue-light))' }}>
       <div className="max-w-2xl mx-auto px-5 text-center">
         <div className="text-5xl mb-6">🏡</div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display" style={{ color: '#1a2e2b' }}>
           El cuidado que necesitas, sin salir de casa
         </h2>
-        <p className="text-lg text-gray-600 mb-8 leading-relaxed" style={{ fontFamily: 'Outfit, sans-serif' }}>
+        <p className="text-lg text-gray-600 mb-8 leading-relaxed">
           Conversemos sobre la atención que necesitas para ti o para un familiar.
         </p>
         <a
@@ -747,7 +766,7 @@ function CtaSection() {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white text-lg font-semibold transition-all hover:opacity-90 active:scale-95 shadow-xl"
-          style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif', boxShadow: '0 8px 30px rgba(37,211,102,0.4)' }}
+          style={{ background: '#25D366', boxShadow: '0 8px 30px rgba(37,211,102,0.4)' }}
         >
           <IconWhatsApp className="w-6 h-6" />
           Hablar por WhatsApp
@@ -786,25 +805,53 @@ function ContactSection() {
         {/* Info */}
         <div>
           <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6"
-            style={{ background: '#d6f2ed', color: '#1d766d', fontFamily: 'Outfit, sans-serif' }}>
+            style={{ background: 'var(--color-teal-100)', color: 'var(--color-teal-700)' }}>
             Contacto
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display" style={{ color: '#1a2e2b' }}>
             Estamos aquí para ayudarte
           </h2>
-          <p className="text-lg text-gray-600 mb-8 leading-relaxed" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <p className="text-lg text-gray-600 mb-6 leading-relaxed">
             La forma más rápida de contactarme es por WhatsApp. También puedes completar el formulario
             y te responderé a la brevedad.
           </p>
+
+          {/* Redes sociales — links pendientes de que la clienta los entregue (ver INSTAGRAM_URL/FACEBOOK_URL) */}
+          <div className="flex items-center gap-3 mb-8">
+            <span className="text-sm font-medium" style={{ color: '#1a2e2b' }}>
+              Síguenos:
+            </span>
+            <a
+              href={INSTAGRAM_URL || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+              style={{ background: 'var(--color-teal-100)', color: 'var(--color-teal-700)' }}
+            >
+              <IconInstagram className="w-5 h-5" />
+            </a>
+            <a
+              href={FACEBOOK_URL || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+              style={{ background: 'var(--color-teal-100)', color: 'var(--color-teal-700)' }}
+            >
+              <IconFacebook className="w-5 h-5" />
+            </a>
+          </div>
+
           <div className="space-y-5">
             {info.map(({ emoji, label, value, sub }) => (
               <div key={label} className="flex items-start gap-4 p-5 rounded-2xl border"
-                style={{ borderColor: '#d6f2ed', background: '#f0faf8' }}>
+                style={{ borderColor: 'var(--color-teal-100)', background: 'var(--color-teal-50)' }}>
                 <div className="text-2xl flex-shrink-0">{emoji}</div>
                 <div>
-                  <div className="text-sm text-gray-500 mb-0.5" style={{ fontFamily: 'Outfit, sans-serif' }}>{label}</div>
-                  <div className="font-semibold text-gray-800" style={{ fontFamily: 'Outfit, sans-serif' }}>{value}</div>
-                  <div className="text-xs text-gray-400 italic mt-0.5" style={{ fontFamily: 'Outfit, sans-serif' }}>{sub}</div>
+                  <div className="text-sm text-gray-500 mb-0.5">{label}</div>
+                  <div className="font-semibold text-gray-800">{value}</div>
+                  <div className="text-xs text-gray-400 italic mt-0.5">{sub}</div>
                 </div>
               </div>
             ))}
@@ -812,25 +859,25 @@ function ContactSection() {
         </div>
 
         {/* Form */}
-        <div className="p-8 rounded-3xl border" style={{ borderColor: '#d6f2ed', background: '#f0faf8' }}>
+        <div className="p-8 rounded-3xl border" style={{ borderColor: 'var(--color-teal-100)', background: 'var(--color-teal-50)' }}>
           {sent ? (
             <div className="text-center py-10">
               <div className="text-5xl mb-4">✅</div>
-              <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+              <h3 className="text-2xl font-bold mb-2 font-display" style={{ color: '#1a2e2b' }}>
                 ¡Mensaje enviado!
               </h3>
-              <p className="text-gray-600" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              <p className="text-gray-600">
                 Se abrió WhatsApp con tu información. Te responderemos pronto.
               </p>
               <button onClick={() => setSent(false)}
                 className="mt-6 text-sm underline"
-                style={{ color: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}>
+                style={{ color: 'var(--color-teal-500)' }}>
                 Enviar otro mensaje
               </button>
             </div>
           ) : (
             <>
-              <h3 className="text-2xl font-semibold mb-6" style={{ fontFamily: 'Fraunces, Georgia, serif', color: '#1a2e2b' }}>
+              <h3 className="text-2xl font-semibold mb-6 font-display" style={{ color: '#1a2e2b' }}>
                 Solicitar información
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -839,7 +886,7 @@ function ContactSection() {
                   { name: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 XXXX XXXX' },
                 ].map(({ name, label, type, placeholder }) => (
                   <div key={name}>
-                    <label htmlFor={`campo-${name}`} className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
+                    <label htmlFor={`campo-${name}`} className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b' }}>
                       {label}
                     </label>
                     <input
@@ -852,17 +899,16 @@ function ContactSection() {
                       required
                       className="w-full px-4 py-3 rounded-xl border text-base outline-none transition-all focus:ring-2"
                       style={{
-                        borderColor: '#d6f2ed',
+                        borderColor: 'var(--color-teal-100)',
                         background: 'white',
                         color: '#1a2e2b',
-                        fontFamily: 'Outfit, sans-serif',
                         boxShadow: 'none',
                       }}
                     />
                   </div>
                 ))}
                 <div>
-                  <label htmlFor="campo-comuna" className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
+                  <label htmlFor="campo-comuna" className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b' }}>
                     Comuna
                   </label>
                   <select
@@ -872,7 +918,7 @@ function ContactSection() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl border text-base outline-none"
-                    style={{ borderColor: '#d6f2ed', background: 'white', color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}
+                    style={{ borderColor: 'var(--color-teal-100)', background: 'white', color: '#1a2e2b' }}
                   >
                     <option value="">Selecciona tu comuna</option>
                     {COMUNAS.map(c => <option key={c} value={c}>{c}</option>)}
@@ -880,7 +926,7 @@ function ContactSection() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="campo-atencion" className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}>
+                  <label htmlFor="campo-atencion" className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b' }}>
                     ¿Qué atención necesitas?
                   </label>
                   <textarea
@@ -892,13 +938,13 @@ function ContactSection() {
                     rows={3}
                     required
                     className="w-full px-4 py-3 rounded-xl border text-base outline-none resize-none"
-                    style={{ borderColor: '#d6f2ed', background: 'white', color: '#1a2e2b', fontFamily: 'Outfit, sans-serif' }}
+                    style={{ borderColor: 'var(--color-teal-100)', background: 'white', color: '#1a2e2b' }}
                   />
                 </div>
                 <button
                   type="submit"
                   className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-white font-semibold text-base transition-all hover:opacity-90 active:scale-95"
-                  style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
+                  style={{ background: '#25D366' }}
                 >
                   <IconWhatsApp className="w-5 h-5" />
                   Solicitar información por WhatsApp
@@ -927,10 +973,10 @@ function Footer() {
       <div className="max-w-6xl mx-auto px-5">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
-            <div className="font-bold text-lg text-white mb-1" style={{ fontFamily: 'Fraunces, Georgia, serif' }}>
+            <div className="font-bold text-lg text-white mb-1 font-display">
               Salud y Estética en tu Hogar
             </div>
-            <div className="text-sm italic" style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'Outfit, sans-serif' }}>
+            <div className="text-sm italic" style={{ color: 'rgba(255,255,255,0.55)' }}>
               "Cuidado profesional, cercano y accesible."
             </div>
           </div>
@@ -938,14 +984,14 @@ function Footer() {
             {links.map(({ label, href }) => (
               <a key={href} href={href}
                 className="inline-flex items-center min-h-11 px-3 text-sm transition-colors hover:text-white"
-                style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Outfit, sans-serif' }}>
+                style={{ color: 'rgba(255,255,255,0.6)' }}>
                 {label}
               </a>
             ))}
           </nav>
         </div>
         <div className="mt-8 pt-6 border-t text-center text-xs"
-          style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.35)', fontFamily: 'Outfit, sans-serif' }}>
+          style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.35)' }}>
           © {new Date().getFullYear()} Salud y Estética en tu Hogar · Santiago, Chile
         </div>
       </div>
@@ -975,13 +1021,13 @@ function FloatingWhatsApp() {
 function MobileBottomBar() {
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t px-4 py-3 flex gap-3"
-      style={{ borderColor: '#d6f2ed' }}>
+      style={{ borderColor: 'var(--color-teal-100)' }}>
       <a
         href={wa('Hola, quiero solicitar una atención de enfermería a domicilio.')}
         target="_blank"
         rel="noopener noreferrer"
         className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl text-white font-semibold text-sm transition-all"
-        style={{ background: '#25D366', fontFamily: 'Outfit, sans-serif' }}
+        style={{ background: '#25D366' }}
       >
         <IconWhatsApp className="w-5 h-5" />
         Solicitar atención
@@ -989,7 +1035,7 @@ function MobileBottomBar() {
       <a
         href="tel:+56978649964"
         className="px-4 py-3.5 rounded-2xl font-semibold text-sm border-2 transition-all"
-        style={{ color: '#1d766d', borderColor: '#2DB9A0', fontFamily: 'Outfit, sans-serif' }}
+        style={{ color: 'var(--color-teal-700)', borderColor: 'var(--color-teal-500)' }}
       >
         Llamar
       </a>
@@ -1002,7 +1048,7 @@ function MobileBottomBar() {
 export default function App() {
   // pb-24 en móvil: deja espacio para MobileBottomBar (fija) y evita que tape el footer
   return (
-    <div className="pb-24 md:pb-0" style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
+    <div className="pb-24 md:pb-0">
       <Header />
       <main>
         <Hero />

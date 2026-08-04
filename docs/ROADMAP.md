@@ -4,8 +4,9 @@ Memoria operativa del proceso de pasar el mockup de Figma a web lista para
 producción. Contexto del proyecto y convenciones: ver `../CLAUDE.md`.
 
 **Estado:** `[ ]` pendiente · `[x]` completado
-**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2, 3, 4 · **Siguiente:** Etapa 5
-**Dominio de producción:** `https://enfermeria-website.vercel.app` (confirmado en el panel de Vercel)
+**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2, 3, 4, 5 · **Siguiente:** Etapa 6
+**Dominio de producción:** `https://saludyestetica.cl` (dominio definitivo, activo desde 2026-08-03;
+reemplaza al provisional `enfermeria-website.vercel.app` usado durante el preview)
 
 ---
 
@@ -53,7 +54,7 @@ build limpio (~290ms, JS 67KB gzip) · cero errores de consola.
 ### 🟡 Medio
 | # | Problema | Impacto | Solución |
 |---|---|---|---|
-| M1 | **Sistema de diseño definido pero sin usar**: 86 `style={{}}` inline, 62 `fontFamily` repetidos, hex a mano (`#2DB9A0`×19, `#1a2e2b`×21, `#d6f2ed`×11); tokens `teal-100`/`teal-700`/`blue-soft`/`warm-*` con **0 usos** | Cambiar un color de marca exige ~20 ediciones manuales | Por partes: **45 `fontFamily:'Outfit'` son redundantes** (verificado: `html` ya la aplica y Fraunces solo va en elementos hoja) → borrar; Fraunces → `.font-display`; hex → tokens |
+| ~~M1~~ | ~~Sistema de diseño definido pero sin usar~~: 86 `style={{}}` inline, 62 `fontFamily` repetidos, hex a mano | — | ✅ Etapa 5 · 47 `fontFamily:'Outfit'` borrados, 17 Fraunces → `.font-display`, 67 hex → `var(--color-*)`. `style={{}}` bajó de 91 a 74 (lo que queda no tenía token exacto) |
 | M2 | `src/imports/pasted_text/enfermeria-domicilio-stgo.html` (324 líneas) sin referenciar | Confunde: parece código vivo | Eliminar (queda en git) o mover a `docs/` |
 | ~~M3~~ | ~~Sin favicon~~ | — | ✅ Etapa 4 · `public/favicon.svg` derivado del isotipo |
 | ~~M4~~ | ~~Faltan `og:image`, `og:url`, `og:type`, `og:locale`, Twitter Cards, `canonical`~~ | — | ✅ Etapa 4 · metadatos completos + `og-image.jpg` 1200×630 |
@@ -167,13 +168,23 @@ con la autorización de la clienta. Ver Etapa 6.)*
   (`<meta robots="noindex, nofollow">` + `robots.txt` con `Disallow: /`) · `tsc` limpio ·
   build OK · sin cambios visuales en desktop/tablet/mobile.
 
-> ✅ **Dominio confirmado** en el panel de Vercel: `https://enfermeria-website.vercel.app`.
-> Verificado en el build que lo usan `canonical`, `og:url`, `og:image`, `twitter:image` y
-> `sitemap.xml`, y que **no aparece ninguna URL de deployment con sufijo** (esas cambian en
-> cada despliegue y romperían la vista previa). Si algún día se contrata dominio propio, se
-> cambia en `site.json` (3 apariciones) y en `public/sitemap.xml`.
+> ✅ **Dominio definitivo activo** (2026-08-03): `https://saludyestetica.cl`, pedido
+> directo de la clienta. Reemplazó al dominio provisional de Vercel en las **3
+> apariciones** de `site.json` (`openGraph.image`, `canonical`, `og:url`) y en
+> `public/sitemap.xml`. Confirmado con grep que no queda ninguna referencia al dominio
+> anterior en el código fuente.
+>
+> **Verificado en el build de producción** (`dist/index.html`, `dist/sitemap.xml`,
+> `dist/robots.txt`): las 20 etiquetas de metadatos usan `saludyestetica.cl` con **URL
+> absoluta** · `og-image.jpg` descarga en HTTP 200 (JPEG, 71 KB) · favicon y sitemap
+> accesibles · simulación de crawler (HTML crudo, sin ejecutar JS — así lo leen
+> WhatsApp/Facebook/X) confirma que verán el dominio correcto · **doble bloqueo de
+> indexación sigue intacto** (`noindex, nofollow` + `Disallow: /`, no se activó) ·
+> **0 referencias a `http://`** en el HTML compilado ni en `src/` — todos los recursos
+> (fuentes, imagen OG, assets) son `https://` o rutas relativas, sin contenido mixto ·
+> `tsc --noEmit` y build limpios.
 
-- **Fin:** ✅ completada. Metadatos, recursos y dominio verificados. Solo queda C1 en el lanzamiento.
+- **Fin:** ✅ completada. Metadatos, recursos y **dominio definitivo** verificados de punta a punta.
 
 ### [x] Petición directa de la clienta (2026-08-02) — fuera del plan de etapas
 
@@ -220,7 +231,7 @@ al 200 % de zoom sobre los rostros · **página 444 KB, LCP 568 ms** · logo en 
 línea y sin colisión con la nav a 768/900/1024/1100/1200/1280/1440 px (sin regresión de
 A7) · 0 overflow y 0 errores de consola en los 6 viewports · `tsc` y build limpios.
 
-### [x] Etapa 3 — Contraste, accesibilidad y header en tablet · pendiente de visto bueno visual
+### [x] Etapa 3 — Contraste, accesibilidad y header en tablet · completada
 
 - [x] **A5 · Contraste WCAG AA en elementos interactivos.** Colores calculados, no elegidos a ojo:
 
@@ -248,11 +259,11 @@ A7) · 0 overflow y 0 errores de consola en los 6 viewports · `tsc` y build lim
       Verificado con `reducedMotion: 'reduce'` y comprobado que **sin la preferencia el sitio
       sigue animando igual**.
 
-- [ ] **Pendiente de decisión de la clienta — h1 del hero.** "en la tranquilidad" en `#2DB9A0`
-      da **2,45:1** y a 60 px necesitaría 3:1. **No se ha cambiado** porque es el elemento más
-      identitario del sitio. Propuesta preparada: `#229487` (**teal-600, ya en la paleta**) →
-      **3,71:1**, cumple AA con un oscurecimiento apenas perceptible. Es un cambio de una línea
-      en `src/App.tsx` (`<span style={{ color: ... }}>` del h1).
+- [x] **H1 del hero — aplicado el 2026-08-03.** "en la tranquilidad" pasa de `#2DB9A0`
+      (2,45:1, no cumplía) a **`#229487`** (teal-600, ya estaba en la paleta). Medido contra
+      los tres puntos del degradado del Hero (`#f0faf8`/`#EBF3FB`/`#f8f4f0`): **3,32:1 a
+      3,49:1**, cumple AA (≥3:1 para texto grande) en los tres casos. Oscurecimiento apenas
+      perceptible, confirmado visualmente. Cambio de una línea en `src/App.tsx`.
 
 > **Corrección de la auditoría inicial:** M5 decía "enlaces del menú móvil 20 px". Al verificar
 > con el menú **abierto** resultó que los de 20 px eran los del **footer** (4 enlaces: Inicio,
@@ -262,16 +273,48 @@ A7) · 0 overflow y 0 errores de consola en los 6 viewports · `tsc` y build lim
 - **Verificado:** contraste re-medido sobre el fondo realmente pintado · header en 7 anchos ·
   0 interactivos < 44 px · reduced-motion activo y desactivado · 0 overflow en los 6 viewports ·
   0 errores de consola · `tsc` limpio · build OK · comparativas antes/después generadas.
-- **Fin:** ✅ sin fallos AA en CTAs. Falta solo el visto bueno visual de la clienta y su decisión sobre el h1.
+- **Fin:** ✅ sin fallos AA en CTAs ni en el h1. Etapa cerrada por completo el 2026-08-03.
 
-### [ ] Etapa 5 — Mantenibilidad · sin cambio visual
-Que modificar la marca deje de costar 20 ediciones.
-- [ ] M1a · Borrar las 45 `fontFamily: 'Outfit'` redundantes (riesgo cero)
-- [ ] M1b · Fraunces → clase `.font-display`
-- [ ] M1c · Hex repetidos → tokens de Tailwind
-- **Verificar:** comparación visual antes/después **en cada sub-paso**.
-- **Fin:** sin regresiones visuales y con los tokens en uso.
-- **Riesgo:** bajo; hacerlo en **commits separados** para poder revertir.
+### [x] Etapa 5 — Mantenibilidad · completada (2026-08-03) · sin cambio visual
+
+- [x] **M1a · Borradas las 47 `fontFamily: 'Outfit'` redundantes** (2 más de las 45
+      estimadas en la auditoría: aparecieron al agregar el logo y las redes sociales
+      en trabajo posterior). `html` en `src/index.css` ya aplica Outfit globalmente,
+      así que sobraban en cualquier elemento que no fuera Fraunces. Incluye también el
+      `fontFamily: 'Outfit, system-ui, sans-serif'` del `<div>` raíz de `App()`, con la
+      misma razón, que no había entrado en el conteo original.
+- [x] **M1b · Los 17 usos de `fontFamily: 'Fraunces, Georgia, serif'` migrados a la
+      clase `.font-display`** (ya definida en `src/index.css`, mismo valor exacto).
+      Un caso (logo del header) ya tenía la clase puesta y el estilo inline quedaba
+      duplicado sin usarse; se limpió el duplicado.
+- [x] **M1c · 67 apariciones de 8 colores hex con token exacto en la paleta**
+      (`#2DB9A0`, `#d6f2ed`, `#f0faf8`, `#1d766d`, `#5B9BD5`, `#EBF3FB`, `#77cec2`,
+      `#229487`) reemplazadas por `var(--color-teal-*)` / `var(--color-blue-soft)` /
+      `var(--color-blue-light)`, que ya declara `@theme` en `src/index.css`. Se dejaron
+      sin tocar los hex que **no tienen un token equivalente exacto** en la paleta
+      (`#1a2e2b`, `#25D366` —verde de marca de WhatsApp—, `#4a6663`, `#356E9E`,
+      `#12211F`, y tres colores puntuales del degradado del Hero): inventar un token
+      nuevo para esos habría sido una decisión de diseño fuera del alcance de esta
+      etapa, no un refactor mecánico.
+
+- **Verificado tras cada sub-paso:** `tsc --noEmit` y build limpios · captura de página
+  completa (desktop 1280px y móvil 390px) antes/después de M1a+M1b y de M1c, comparadas
+  **píxel a píxel** (no a ojo). Resultado: **0 diferencias en desktop**; en móvil, un
+  único clúster de diferencias resultó ser antialiasing del texto nativo del `<select>`
+  "Selecciona tu comuna" (mismo texto, misma posición, solo el suavizado de las letras
+  varía) — confirmado como ruido de renderizado y no un cambio real: 3 capturas
+  consecutivas del build final en esa misma región dieron 0 píxeles de diferencia entre
+  sí, y un intento de realinear la comparación con desplazamientos de ±2 px no redujo el
+  conteo, descartando que fuera un desplazamiento de layout. También se confirmó por
+  separado que el punto `animate-pulse` de "Disponible en Santiago" cambia de píxeles
+  entre dos capturas del **mismo** build (fase de la animación en el instante de la
+  captura), así que esa fuente de ruido ya era conocida y se excluyó del análisis.
+  0 overflow y 0 errores de consola en los 6 viewports estándar.
+
+- **Fin:** ✅ sin regresiones visuales, tokens en uso donde existía un equivalente
+  exacto. Quedan **74 `style={{}}`** (bajaron de 91): son props que no son fuente ni
+  color con token exacto (background con gradientes, boxShadow, borderColor sin
+  token, etc.) — no se tocaron, no era el objetivo de esta etapa.
 
 ### [ ] Etapa 6 — QA final y lanzamiento
 - [ ] B5 · Actualizar dependencias

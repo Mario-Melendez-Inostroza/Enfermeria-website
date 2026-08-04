@@ -4,7 +4,8 @@ Memoria operativa del proceso de pasar el mockup de Figma a web lista para
 producción. Contexto del proyecto y convenciones: ver `../CLAUDE.md`.
 
 **Estado:** `[ ]` pendiente · `[x]` completado
-**Última auditoría:** 2026-07-30 · **Etapas completadas:** 0, 1, 2, 3, 4, 5 · **Siguiente:** Etapa 6
+**Última auditoría:** 2026-08-03 (indexación activada) · **Etapas completadas:** 0, 1, 2, 3, 4, 5, 6
+**Indexación:** ✅ activa desde 2026-08-03 — `robots.index: true`, sin bloqueos, Lighthouse SEO 100/100
 **Dominio de producción:** `https://saludyestetica.cl` (dominio definitivo, activo desde 2026-08-03;
 reemplaza al provisional `enfermeria-website.vercel.app` usado durante el preview)
 
@@ -37,7 +38,7 @@ build limpio (~290ms, JS 67KB gzip) · cero errores de consola.
 ### 🔴 Crítico
 | # | Problema | Impacto | Solución |
 |---|---|---|---|
-| C1 | `robots.index: false` → `noindex` + `Disallow: /` | Google no indexa; anula el objetivo comercial | Activar al lanzar (hoy es correcto que esté bloqueado) |
+| ~~C1~~ | ~~`robots.index: false` → `noindex` + `Disallow: /`~~ | ~~Google no indexaba~~ | ✅ Resuelto: indexación activada el 2026-08-03, `robots.txt` permite rastreo completo |
 | C2 | `lang="en"` con contenido en español | Lectores de pantalla pronuncian mal; SEO erróneo | `"language": "es-CL"` en `site.json` |
 
 ### 🟠 Alto
@@ -316,16 +317,94 @@ A7) · 0 overflow y 0 errores de consola en los 6 viewports · `tsc` y build lim
   color con token exacto (background con gradientes, boxShadow, borderColor sin
   token, etc.) — no se tocaron, no era el objetivo de esta etapa.
 
-### [ ] Etapa 6 — QA final y lanzamiento
-- [ ] B5 · Actualizar dependencias
-- [ ] B2 · Validación del formulario
-- [ ] Repaso en los 6 viewports
-- [ ] Verificar el deploy en Vercel
-- [ ] **C1 · Activar la indexación** (`robots.index: true`) — **último paso, solo con la
-      autorización explícita de la clienta.** Después: comprobar que `robots.txt` deja de
-      servir `Disallow: /` y que desaparece `<meta name="robots" content="noindex, nofollow">`,
-      y validar la vista previa del enlace en WhatsApp con el sitio ya publicado.
-- **Fin:** build limpio, sin errores de consola, aprobación de la clienta.
+### [x] Etapa 6 — QA final y lanzamiento · completada
+
+Auditoría completa (2026-08-03) hecha como revisión senior — código, rendimiento,
+accesibilidad, SEO, UX, responsive, seguridad, buenas prácticas y mantenibilidad — con
+la condición explícita de no alterar el diseño aprobado. **Todo lo implementable sin
+tocar el diseño quedó implementado**; lo que sí requería una decisión visual se dejó
+documentado en vez de improvisarlo (ver más abajo).
+
+- [x] **B5 · Dependencias actualizadas dentro de los rangos `^` ya declarados**
+      (`pnpm update`, sin saltos de mayor): `react`/`react-dom` → 19.2.8, `vite` →
+      8.2.0, `tailwindcss` + `@tailwindcss/vite` → 4.3.3, `@vitejs/plugin-react` →
+      6.0.5, tipos al día. **Fuera de rango, no tocados sin decisión explícita**:
+      `typescript` (5→7), `@types/node` (22→26), `oxfmt` (0.2→0.61) — son saltos
+      mayores que podrían romper algo; quedan para una revisión planeada aparte.
+- [x] **B2 · Formulario** — `window.open` ahora lleva `'noopener,noreferrer'` y, si el
+      navegador bloquea el popup, cae a `location.href` para que el usuario no se
+      quede sin respuesta. El teléfono tiene `pattern="[+]?[0-9 ]{8,15}"` con mensaje
+      de validación.
+- [x] **Seguridad · cabeceras HTTP** — no existían. Se creó `vercel.json` con
+      `X-Content-Type-Options`, `X-Frame-Options: DENY`, `Referrer-Policy`,
+      `Permissions-Policy` y una `Content-Security-Policy` (`script-src 'self'`;
+      `style-src` necesita `'unsafe-inline'` porque el sitio usa `style={{}}` de React
+      en vez de solo clases — es el único trade-off, documentado aquí). **No se pueden
+      probar cabeceras HTTP contra un `vite preview` local** (Vercel las aplica en su
+      capa de routing) — **verificar una vez con `securityheaders.com` o `curl -I`
+      después del próximo deploy**, sobre todo que Google Fonts y los enlaces a
+      WhatsApp sigan funcionando.
+- [x] **Accesibilidad** — 2 `<nav>` (header/footer) sin distinguir → `aria-label`
+      añadido a cada uno; menú móvil pasó de `<div>` a `<nav>` con su propio label;
+      8 emoji/símbolos puramente decorativos (✓, 🏠, 🏡, 📱🕐📍) marcados
+      `aria-hidden="true"` para que un lector de pantalla no los anuncie por su nombre
+      cuando el texto de al lado ya dice lo mismo; botón "Enviar otro mensaje" sin
+      `type="button"` corregido; **skip-link activado** (`accessibility.addBypassLinks`
+      en `site.json`) — el plugin de Figma Make traía el texto hardcodeado en inglés
+      ("Skip to content"), se tradujo a "Saltar al contenido" en `vite.config.ts`.
+      Solo es visible al navegar con Tab, no cambia el diseño visual normal.
+- [x] **SEO** — meta description de 184 caracteres (Google trunca ~155-160) acortada a
+      136 sin perder los servicios mencionados; datos estructurados **JSON-LD
+      `LocalBusiness`** añadidos (nombre, teléfono, comunas de cobertura, dirección) —
+      mejora la posibilidad de resultados enriquecidos, no se renderiza en la página.
+- [x] **Rendimiento** — `scroll` listener del header sin `{ passive: true }`
+      (`src/App.tsx`), micro-optimización estándar.
+- [x] **Mantenibilidad** — `#aee4da` hardcodeado en `src/index.css` (scrollbar) era
+      exactamente `--color-teal-200`; quedó fuera del barrido de la Etapa 5 porque esa
+      etapa solo tocó `App.tsx`. Migrado al token.
+- [x] **Repaso en los 6 viewports** (320/390/768/1280/1440/1920): 0 overflow, 0
+      errores de consola. **Diff de página completa píxel a píxel** contra el estado
+      previo a esta etapa: **0 diferencias en móvil**; en desktop, el único resto (60
+      píxeles) coincide exactamente con el punto `animate-pulse` de "Disponible en
+      Santiago" ya caracterizado como ruido de animación en la Etapa 5 — confirmado,
+      no un cambio real.
+
+> **Documentado, no implementado — requiere una decisión de la clienta:**
+> **`apple-touch-icon`** para iOS. El favicon SVG actual no cubre el ícono de pantalla
+> de inicio en iOS (usa un PNG dedicado de 180×180). Generarlo bien implica decidir
+> cuánto relleno/zona segura dejar alrededor del isotipo para que no se vea recortado
+> con las esquinas redondeadas que aplica iOS — es una micro-decisión sobre un asset de
+> marca, no un cambio mecánico, así que no se improvisó.
+
+- [x] **C1 · Indexación activada (2026-08-03), con autorización explícita del cliente**
+      — dominio definitivo `https://saludyestetica.cl` ya en producción.
+  - `robots.index: true` en `site.json` → la etiqueta `<meta name="robots" ...>`
+    **ya no se genera** (el plugin solo la agrega cuando `index === false`).
+    Confirmado con grep sobre `dist/index.html`: cero apariciones de
+    `robots`/`noindex`/`nofollow`.
+  - `vite.config.ts` — antes, cuando `index` no era `false`, no se generaba **ningún**
+    `robots.txt` (string vacío). Se cambió la lógica para que en ese caso emita uno
+    explícito: `User-agent: *` / `Allow: /` / `Sitemap: https://saludyestetica.cl/sitemap.xml`.
+    Preferible a dejar el archivo ausente: es explícito y ayuda a los crawlers a
+    encontrar el sitemap directamente.
+  - **Lighthouse SEO: 100/100.** El audit `is-crawlable` ("Page isn't blocked from
+    indexing") pasa con score 1 y **cero directivas de bloqueo detectadas**.
+  - **Re-auditoría SEO completa** (misma metodología de la Etapa 4: HTML crudo, sin
+    ejecutar JS, como lo leen los crawlers reales): canonical, las 20 etiquetas
+    Open Graph/Twitter, JSON-LD y `sitemap.xml` — todos apuntan a
+    `https://saludyestetica.cl` con URL absoluta. `robots.txt`, `sitemap.xml` y
+    `og-image.jpg` responden HTTP 200.
+  - Actualizado el comentario desactualizado en `public/sitemap.xml` que aún decía
+    "mientras robots.index sea false" (arrastrado desde la Etapa 4).
+  - 0 overflow y 0 errores de consola en los 6 viewports · `tsc` y build limpios ·
+    **sin cambios de diseño ni de contenido visible**, tal como se pidió.
+- [ ] Verificar el deploy en Vercel con el build final (incluye confirmar las
+      cabeceras de seguridad en producción, ver nota de `vercel.json` en el bloque
+      anterior — es lo único que no se pudo probar en local).
+
+- **Fin:** ✅ Etapa 6 completada. Build limpio, sin errores de consola, sin cambios de
+  diseño, indexación activa y verificada. Solo queda confirmar las cabeceras HTTP una
+  vez que el build llegue a producción.
 
 ---
 

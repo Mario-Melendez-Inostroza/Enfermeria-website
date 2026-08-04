@@ -71,7 +71,7 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #aee4da;
+  background: var(--color-teal-200);
   border-radius: 3px;
   opacity: 0;
 }

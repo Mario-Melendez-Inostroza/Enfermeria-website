@@ -91,7 +91,9 @@ function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
   const headEnd = config.customScripts?.headEnd ?? ''
   const bodyStart = config.customScripts?.bodyStart ?? ''
   const bodyEnd = config.customScripts?.bodyEnd ?? ''
-  const robotsTxt = config.robots?.index === false ? 'User-agent: *\nDisallow: /\n' : ''
+  const robotsTxt = config.robots?.index === false
+    ? 'User-agent: *\nDisallow: /\n'
+    : 'User-agent: *\nAllow: /\n\nSitemap: https://saludyestetica.cl/sitemap.xml\n'
 
   return {
     name: 'figma-site-configuration',
@@ -197,7 +199,7 @@ function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
             {
               tag: 'a',
               attrs: { class: 'figma-bypass-link', href: '#root' },
-              children: 'Skip to content',
+              children: 'Saltar al contenido',
               injectTo: 'body-prepend',
             },
           )

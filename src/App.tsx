@@ -180,7 +180,7 @@ function Header() {
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handler)
+    window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
@@ -219,7 +219,7 @@ function Header() {
         </a>
 
         {/* Desktop nav — a partir de lg: por debajo no cabe junto al logo y el CTA */}
-        <nav className="hidden lg:flex items-center gap-7">
+        <nav aria-label="Navegación principal" className="hidden lg:flex items-center gap-7">
           {navLinks.map(({ label, href }) => (
             <a
               key={href}
@@ -258,7 +258,7 @@ function Header() {
 
       {/* Mobile menu */}
       {open && (
-        <div id="menu-movil" className="lg:hidden bg-white border-t border-gray-100 px-5 py-3 flex flex-col gap-1">
+        <nav id="menu-movil" aria-label="Navegación móvil" className="lg:hidden bg-white border-t border-gray-100 px-5 py-3 flex flex-col gap-1">
           {navLinks.map(({ label, href }) => (
             <a
               key={href}
@@ -280,7 +280,7 @@ function Header() {
             <IconWhatsApp className="w-5 h-5" />
             Agendar por WhatsApp
           </a>
-        </div>
+        </nav>
       )}
     </header>
   )
@@ -326,7 +326,7 @@ function Hero() {
             {['Atención a domicilio', 'Trato personalizado', 'Precios accesibles'].map(item => (
               <div key={item} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm text-sm font-medium"
                 style={{ color: 'var(--color-teal-700)' }}>
-                <span style={{ color: 'var(--color-teal-700)' }}>✓</span>
+                <span aria-hidden="true" style={{ color: 'var(--color-teal-700)' }}>✓</span>
                 {item}
               </div>
             ))}
@@ -383,7 +383,7 @@ function Hero() {
           <div className="absolute -bottom-16 -left-3 sm:-left-5 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 max-w-52">
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: 'var(--color-teal-100)' }}>
-              <span style={{ color: 'var(--color-teal-500)' }}>🏠</span>
+              <span aria-hidden="true" style={{ color: 'var(--color-teal-500)' }}>🏠</span>
             </div>
             <div>
               <div className="text-xs text-gray-500">Atención en</div>
@@ -754,7 +754,7 @@ function CtaSection() {
   return (
     <section id="cta" className="py-20" style={{ background: 'linear-gradient(135deg, var(--color-teal-50), var(--color-blue-light))' }}>
       <div className="max-w-2xl mx-auto px-5 text-center">
-        <div className="text-5xl mb-6">🏡</div>
+        <div className="text-5xl mb-6" aria-hidden="true">🏡</div>
         <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display" style={{ color: '#1a2e2b' }}>
           El cuidado que necesitas, sin salir de casa
         </h2>
@@ -789,7 +789,10 @@ function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const msg = `Hola, mi nombre es ${form.nombre}. Mi teléfono es ${form.telefono}, estoy en ${form.comuna}. Necesito: ${form.atencion}`
-    window.open(wa(msg), '_blank')
+    const win = window.open(wa(msg), '_blank', 'noopener,noreferrer')
+    // Si el navegador bloquea el popup, se navega en la misma pestaña para que el
+    // usuario no se quede sin respuesta.
+    if (!win) window.location.href = wa(msg)
     setSent(true)
   }
 
@@ -847,7 +850,7 @@ function ContactSection() {
             {info.map(({ emoji, label, value, sub }) => (
               <div key={label} className="flex items-start gap-4 p-5 rounded-2xl border"
                 style={{ borderColor: 'var(--color-teal-100)', background: 'var(--color-teal-50)' }}>
-                <div className="text-2xl flex-shrink-0">{emoji}</div>
+                <div className="text-2xl flex-shrink-0" aria-hidden="true">{emoji}</div>
                 <div>
                   <div className="text-sm text-gray-500 mb-0.5">{label}</div>
                   <div className="font-semibold text-gray-800">{value}</div>
@@ -862,14 +865,14 @@ function ContactSection() {
         <div className="p-8 rounded-3xl border" style={{ borderColor: 'var(--color-teal-100)', background: 'var(--color-teal-50)' }}>
           {sent ? (
             <div className="text-center py-10">
-              <div className="text-5xl mb-4">✅</div>
+              <div className="text-5xl mb-4" aria-hidden="true">✅</div>
               <h3 className="text-2xl font-bold mb-2 font-display" style={{ color: '#1a2e2b' }}>
                 ¡Mensaje enviado!
               </h3>
               <p className="text-gray-600">
                 Se abrió WhatsApp con tu información. Te responderemos pronto.
               </p>
-              <button onClick={() => setSent(false)}
+              <button type="button" onClick={() => setSent(false)}
                 className="mt-6 text-sm underline"
                 style={{ color: 'var(--color-teal-500)' }}>
                 Enviar otro mensaje
@@ -883,8 +886,15 @@ function ContactSection() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {[
                   { name: 'nombre', label: 'Nombre', type: 'text', placeholder: 'Tu nombre completo' },
-                  { name: 'telefono', label: 'Teléfono', type: 'tel', placeholder: '+56 9 XXXX XXXX' },
-                ].map(({ name, label, type, placeholder }) => (
+                  {
+                    name: 'telefono',
+                    label: 'Teléfono',
+                    type: 'tel',
+                    placeholder: '+56 9 XXXX XXXX',
+                    pattern: '[+]?[0-9 ]{8,15}',
+                    title: 'Ingresa un número de teléfono válido (8 a 15 dígitos, puede incluir +).',
+                  },
+                ].map(({ name, label, type, placeholder, pattern, title }) => (
                   <div key={name}>
                     <label htmlFor={`campo-${name}`} className="block text-sm font-medium mb-1.5" style={{ color: '#1a2e2b' }}>
                       {label}
@@ -896,6 +906,8 @@ function ContactSection() {
                       value={form[name as keyof typeof form]}
                       onChange={handleChange}
                       placeholder={placeholder}
+                      pattern={pattern}
+                      title={title}
                       required
                       className="w-full px-4 py-3 rounded-xl border text-base outline-none transition-all focus:ring-2"
                       style={{
@@ -980,7 +992,7 @@ function Footer() {
               "Cuidado profesional, cercano y accesible."
             </div>
           </div>
-          <nav className="flex flex-wrap gap-1 justify-center">
+          <nav aria-label="Pie de página" className="flex flex-wrap gap-1 justify-center">
             {links.map(({ label, href }) => (
               <a key={href} href={href}
                 className="inline-flex items-center min-h-11 px-3 text-sm transition-colors hover:text-white"

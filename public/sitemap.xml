@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Preparado para el lanzamiento. Mientras robots.index sea false, robots.txt sirve
-  "Disallow: /" y este sitemap no se rastrea. Al activar la indexación, revisar que
-  la URL coincida con el dominio definitivo.
+  Sitio en producción, indexación activa desde 2026-08-03. Referenciado desde
+  robots.txt (ver la lógica en vite.config.ts).
   Sitio de una sola página: las secciones son anclas (#servicios, #cobertura...),
   no URLs propias, por eso hay una única entrada.
 -->

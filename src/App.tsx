@@ -5,10 +5,9 @@ const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER}`
 const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
 
-// Pendiente: la clienta debe entregar sus URLs de Instagram y Facebook.
-// Al recibirlas, reemplazar aquí — no hace falta tocar el JSX.
-const INSTAGRAM_URL = ''
-const FACEBOOK_URL = ''
+
+const INSTAGRAM_URL = ""
+const FACEBOOK_URL = " https://www.facebook.com/ProfesorGerardo"
 
 const HERO_IMG = '/images/hero.webp'
 // Fundido de los bordes de la foto del Hero hacia el fondo de la sección.
@@ -194,9 +193,8 @@ function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'
+        }`}
     >
       <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
         {/* Logo */}

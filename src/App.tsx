@@ -796,7 +796,7 @@ function ContactSection() {
 
   const info = [
     { emoji: '📱', label: 'WhatsApp / Teléfono', value: '+56 9 7864 9964', sub: 'Escríbenos directamente' },
-    { emoji: '🕐', label: 'Horario de atención', value: 'Lunes a sábado', sub: 'Consulta disponibilidad de horario' },
+    { emoji: '🕐', label: 'Horario de atención', value: 'Disponibilidad 24/7', sub: 'Consulta disponibilidad de horario' },
     { emoji: '📍', label: 'Área de cobertura', value: 'Santiago, zona sur y centro', sub: 'Consulta disponibilidad por tu comuna' },
   ]
 

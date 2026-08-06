@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const WHATSAPP_NUMBER = '56978649964'
+const WHATSAPP_NUMBER = '56935316949'
 const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER}`
 const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
@@ -795,7 +795,7 @@ function ContactSection() {
   }
 
   const info = [
-    { emoji: '📱', label: 'WhatsApp / Teléfono', value: '+56 9 7864 9964', sub: 'Escríbenos directamente' },
+    { emoji: '📱', label: 'WhatsApp / Teléfono', value: '+56 9 3531 6949', sub: 'Escríbenos directamente' },
     { emoji: '🕐', label: 'Horario de atención', value: 'Disponibilidad 24/7', sub: 'Consulta disponibilidad de horario' },
     { emoji: '📍', label: 'Área de cobertura', value: 'Santiago, zona sur y centro', sub: 'Consulta disponibilidad por tu comuna' },
   ]
@@ -1043,7 +1043,7 @@ function MobileBottomBar() {
         Solicitar atención
       </a>
       <a
-        href="tel:+56978649964"
+        href="tel:+56935316949"
         className="px-4 py-3.5 rounded-2xl font-semibold text-sm border-2 transition-all"
         style={{ color: 'var(--color-teal-700)', borderColor: 'var(--color-teal-500)' }}
       >

@@ -7,7 +7,7 @@ const wa = (msg: string) =>
 
 
 const INSTAGRAM_URL = ""
-const FACEBOOK_URL = ""
+const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61592637825378"
 
 const HERO_IMG = '/images/hero.webp'
 // Fundido de los bordes de la foto del Hero hacia el fondo de la sección.

@@ -6,7 +6,7 @@ const wa = (msg: string) =>
   `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`
 
 
-const INSTAGRAM_URL = ""
+const INSTAGRAM_URL = "https://www.instagram.com/enfemeria_a_domicilio/"
 const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61592637825378"
 
 const HERO_IMG = '/images/hero.webp'

@@ -1,0 +1,21 @@
+{
+  "title": "Salud y Estética en tu Hogar",
+  "language": "es-CL",
+  "description": "Atención de enfermería y estética a domicilio en Santiago: curaciones, inyecciones, controles, botox y más, en la comodidad de tu hogar.",
+  "robots": {
+    "index": false
+  },
+  "icons": {
+    "icon": "/favicon.svg"
+  },
+  "openGraph": {
+    "image": "https://saludyestetica.cl/og-image.jpg"
+  },
+  "customScripts": {
+    "headEnd": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Outfit:wght@400;500;600&amp;display=swap\">\n    <meta name=\"theme-color\" content=\"#2DB9A0\">"
+  },
+  "accessibility": {
+    "addBypassLinks": true,
+    "ignoreReducedMotion": false
+  }
+}
